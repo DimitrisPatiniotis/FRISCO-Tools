@@ -1,0 +1,7 @@
+__pycache__/
+venv/
+*.csv
+.env
+*.ini
+*.sqlite3
+temp/

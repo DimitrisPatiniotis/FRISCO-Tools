@@ -1,0 +1,11 @@
+.admin-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 5fr;
+}
+
+.admin-wrapper-content-wrapper {
+    background-color: rgb(242,242,242);
+    padding: 10px 40px;
+    max-height: 100vh;
+    overflow-y:auto;
+}

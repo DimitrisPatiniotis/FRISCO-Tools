@@ -1,0 +1,7 @@
+.login-wrapper{
+    background-color: rgb(42, 105, 206);
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

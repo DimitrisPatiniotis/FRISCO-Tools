@@ -1,0 +1,8 @@
+.edit-save-btn {
+    transform: translateY(-0.5rem);
+}
+
+.update-delete-icon {
+    transform: translateY(-5px);
+    color: rgb(120,120,120);
+}

@@ -1,0 +1,52 @@
+/* Question.css */
+.question-container {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    z-index: 100;
+    margin-left: 10%;
+}
+
+@keyframes swipeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-100vh);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes swipeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(100vh);
+    }
+}
+
+.question-slide-exit-active {
+    animation: swipeOut 0.3s ease-in-out;
+}
+
+.question-slide-enter-active {
+    animation: swipeIn 0.3s ease-in-out;
+}
+
+.question-slide {
+    display: flex;
+    width: 100%;
+    flex-shrink: 0;
+    flex-direction: column;
+}
+
+.question-title {
+    display: grid;
+    grid-template-columns: 420px 280px;
+}

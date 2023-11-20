@@ -1,0 +1,36 @@
+.admin-avatar-wrapper {
+    padding: 10px;
+    display: flex;
+    gap: 15px;
+}
+
+.admin-avatar-img-wrapper {
+
+    height: 42px;
+    width: 42px;
+    border-radius: 500px;
+}
+
+.admin-avatar-img-wrapper img {
+    height: 100%;
+    width: 100%;
+    border-radius: 400px;
+}
+
+.admin-avatar-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 2px 0;
+}
+
+.admin-avatar-info--main {
+    font-size: 105%;
+    line-height: 120%;
+    font-weight: bold;
+}
+
+.admin-avatar-info--secondary {
+    font-size: 90%;
+    line-height: 120%;
+}

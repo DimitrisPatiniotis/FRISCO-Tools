@@ -1,0 +1,7 @@
+.status-circle {
+    height: 12px;
+    width: 12px;
+    align-self: center;
+    margin-right: 8px;
+    border-radius: 12px;
+}

@@ -1,0 +1,23 @@
+.response-row-wrapper {
+    height: 40px;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 0.5fr;
+    align-items: center;
+    padding: 0 20px;
+    margin: 5px 0;
+}
+
+.response-row-wrapper:hover {
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.15);
+    background-color: rgb(243,243,243);
+    cursor: pointer;
+}
+
+.response-row-icon {
+    font-size: 130%;
+
+}
+.response-row-icon:hover {
+    color: rgb(42 105 206);
+}

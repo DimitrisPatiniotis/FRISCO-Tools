@@ -1,0 +1,15 @@
+.question-header {
+    min-height: 40px;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: 0.6fr 2.7fr 1.8fr 1.2fr 0.7fr 0.7fr 0.6fr;
+    align-items: center;
+    padding: 10px 20px;
+    gap: 2px;
+    border-bottom: 2px solid rgb(243,243,243);
+}
+
+form.question-header {
+    height: auto;
+    grid-template-columns: 0.8fr 2.3fr 2fr 1.3fr 1fr 1fr;
+}

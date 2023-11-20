@@ -1,0 +1,55 @@
+.admin-sidebar {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 5%;
+    min-height: 100vh;
+    background-color: white ;
+}
+.sidebar-menu {
+    height: 100%;
+}
+.admin-logo img {
+    height: 80%;
+}
+
+.sidebar-menu-item {
+    height: 45px;
+    padding: 10px 8px;
+    cursor: pointer;
+    background-color: white;
+    margin: 4px 0;
+    border-radius: 8px;
+    color: rgb(42 105 206);
+    /* transition: background-color 0.1s; */
+}
+
+.sidebar-menu-item.active {
+    background-color: rgb(42 105 206);
+    color: white;
+}
+.sidebar-menu-item.active .ion-icon-item {
+    color: white;
+}
+
+.sidebar-menu-item:hover {
+    background-color: rgba(0,0,0,0.05);
+}
+.sidebar-menu-item.active:hover {
+    background-color: rgb(42 105 206);
+}
+
+.ion-icon-item {
+    transform: translateY(3px);
+    color: rgb(42 105 206);
+    font-size: 120%;
+    margin-right: 2px;
+}
+
+.sidebar-menu-item.logout {
+    justify-self: flex-end;
+    font-size: 105%;
+}
+
+.admin-sidebar {
+    box-shadow: 5px 0px 3px rgba(0,0,0,0.05);
+}
