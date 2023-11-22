@@ -26,6 +26,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "date-fns": "^2.30.0",
+    "html-to-image": "^1.11.11",
     "i18next": "^23.5.0",
     "ionicons": "^7.1.2",
     "jointjs": "^3.7.5",

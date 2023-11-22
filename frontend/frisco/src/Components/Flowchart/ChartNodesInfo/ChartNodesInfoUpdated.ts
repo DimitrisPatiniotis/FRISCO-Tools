@@ -41,8 +41,9 @@ interface NodeInfo {
 
 type StateToQuestions = {
     [key: number]: {
-        question: string;
-        answers: { answer_text: string; answer_add: number[] }[];
+        question?: string;
+        answers?: { answer_text: string; answer_add: number[] }[];
+        is_last_node?: boolean;
     };
 };
 
@@ -691,10 +692,9 @@ export const initialEdges_1: Edge[] = [
     { id: "e40-41", source: "40", target: "41", },
     { id: "e40-42", source: "40", target: "42", },
     { id: "e40-44", source: "40", target: "44", },
-    { id: "e40-44", source: "40", target: "44", },
     { id: "e44-45", source: "44", target: "45", },
     { id: "e45-46", source: "45", target: "46", },
-    { id: "e46-49", source: "46", target: "47", label: "No", sourceHandle: 'source-3', },
+    { id: "e46-47", source: "46", target: "47", label: "No", sourceHandle: 'source-3', },
     { id: "47-48", source: "47", target: "48", label: "No", sourceHandle: 'source-2', },
     { id: "47-11", source: "47", target: "11", label: "Yes", sourceHandle: 'source-3', },
     { id: "47-11", source: "48", target: "11", label: "Yes", sourceHandle: 'source-3', },
@@ -722,7 +722,7 @@ export const initialEdges_1: Edge[] = [
     { id: "e36-37", source: "36", target: "37", label: "Got It!" },
     { id: "e37-38", source: "37", target: "38", label: "Got It!" },
     { id: "e38-39", source: "38", target: "39", label: "Got It!" },
-    { id: "e38-39", source: "39", target: "89", },
+    { id: "e39-89", source: "39", target: "89", },
 
     { id: "e56-57", source: "56", target: "57" },
     { id: "e57-58", source: "57", target: "58" },
@@ -735,8 +735,8 @@ export const initialEdges_1: Edge[] = [
     { id: "e53-54", source: "53", target: "54" },
 
     { id: "e60-61", source: "60", target: "61" },
-    { id: "e61-62", source: "62", target: "63", label: "Yes", targetHandle: 'target-4' },
-    { id: "e62-63", source: "63", target: "64" },
+    { id: "e62-63", source: "62", target: "63", label: "Yes", targetHandle: 'target-4' },
+    { id: "e63-64", source: "63", target: "64" },
     { id: "e61-63", source: "62", target: "64", label: "No", sourceHandle: 'source-2', targetHandle: 'target-4' },
 
     { id: "e64-65", source: "64", target: "65", label: "No" },
@@ -969,5 +969,9 @@ export const stateToQuestions: StateToQuestions = {
     83: {
         question: "Have you informed the user that its appeal was rejected and provided an explainer?",
         answers: [{ answer_text: "Yes", answer_add: [85, 92, 87, 88, 31, 32, 33]}, {answer_text:"No", answer_add:[84, 85, 92, 87, 88, 31, 32, 33]}]
-    }
+    },
+    89: {
+        question: "You can now download the whole process map",
+        is_last_node: true,
+    },
 };
