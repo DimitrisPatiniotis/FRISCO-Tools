@@ -23,25 +23,21 @@ const Tooltip: React.FC<TooltipProps> = ({ title, text }) => {
 
         <div
 
-            className='flexible-width bg-blue-800 mt-1 rounded-md flex flex-col select-none py-1 px-2 absolute overflow-hidden'
+            className={`flexible-width simple-fade-in bg-frisco_purple mt-1 rounded-md flex flex-col select-none py-1 px-2 absolute  overflow-hidden`}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
         >
             <div
                 className={`text-sm flex`}
             >
-                <div className='h-10'>
-                <IonIcon name="information-outline" style={{ transform: " translateX(0px) translateY(3px)", fontSize:"16px" }} />
+                <div className='h-6'>
+                    <IonIcon icon="information-outline" style={{ transform: " translateX(0px) translateY(3px)", fontSize: "16px" }} className='mr-1'/>
                 </div>
-                <span
-                    className={`overflow-hidden whitespace-no-wrap inline-block ml-1 pt-0.5 ${isVisible ? 'opacity-transition' : 'opacity-transition-reversed'}`}
-                >
-                    {/* {title} */}
-                </span>
+                <div className={`mt-1 ${isVisible ? 'opacity-transition' : 'opacity-transition-reversed'} `} style={{ transform: " translateX(0px) translateY(-1px)" }}>
+                    <HTMLRenderer htmlContent={text} />
+                </div>
             </div>
-            <div className={`mt-1 ${isVisible ? 'opacity-transition' : 'opacity-transition-reversed'}`}>
-                <HTMLRenderer htmlContent={text} />
-            </div>
+
 
         </div>
 

@@ -1,6 +1,8 @@
 import React, { memo } from 'react';
 import { Handle, Position } from 'reactflow';
 
+
+
 interface CustomNodeProps {
   data: {
     id: string;

@@ -14,8 +14,8 @@ const ProgressBar: React.FC<PorgressBarProps> = ({ totalQuestions, currentQuesti
     }, [currentQuestion, totalQuestions]);
 
     return (
-        <div className="progress-bar">
-            <div className="progress-bar__fill" style={{ width: `${progress}%` }}></div>
+        <div className="absolute top-0 left-0 w-full h-[6px] bg-neutral-50">
+            <div className="progress-bar__fill h-full bg-frisco_purple" style={{ width: `${progress}%` }}></div>
         </div>
     );
 }

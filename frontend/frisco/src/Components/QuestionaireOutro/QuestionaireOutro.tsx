@@ -99,38 +99,74 @@ const QuestionaireOutro: React.FC<QuestionaireOutroProps> = ({ questionaireId, r
     }
   }
 
+  const downloadPdf = async () => {
+
+    const requestOptions = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+    try {
+      const response = await fetch(`${ACTIVE_URL}/api/user_download_pdf/${responseId}/`, requestOptions);
+      if (response.ok) {
+        const contentDisposition = response.headers.get('content-disposition');
+        const filename = contentDisposition
+          ? contentDisposition.split('filename=')[1]
+          : 'FRISCO_Response_Overview.pdf';
+
+        const blob = await response.blob();
+        const a = document.createElement('a');
+        a.href = window.URL.createObjectURL(blob);
+        a.download = filename;
+        a.click();
+      } else {
+        console.error('Failed to fetch questions');
+      }
+    } catch (error) {
+      console.error('Error fetching questions:', error);
+    }
+  }
+
   return (
 
-    <div className='text-center question-slide  question-container'>
-      <h2 className='text-4xl font-bold mb-4'>{title}</h2>
-      <p className='mb-2'>{description}</p>
+    <div className='text-center question-slide relative'>
+      <h2 className='text-4xl font-bold mb-4 text-neutral-800'>{title}</h2>
+      <p className='mb-2 text-neutral-600'>{description}</p>
       <div className='flex justify-center text-3xl flex-col'>
-        <h3 className='text-2xl font-bold mb-3 pt-3'>Your Compliance Score Is</h3>
+        <h3 className='text-2xl font-bold mb-3 pt-3 text-neutral-800'>Your Compliance Score Is</h3>
         <div className='flex w-full items-center justify-center gap-1'>
-          <NumberCounter endValue={complianceScore} duration={500} />
-          <span>%</span>
+          <NumberCounter endValue={complianceScore} duration={500} text_class={'text-frisco_orange'} />
+          <span className='text-frisco_orange'>%</span>
         </div>
 
       </div>
       {emailSubmitted ? (
-        <h3 className='text-2xl font-bold mb-4 pt-4'>Thank you for providing your email!</h3>
+        <h3 className='text-2xl font-bold mb-4 pt-4 text-neutral-800'>Thank you for providing your email!</h3>
       ) : (
         <div>
-          <h3 className='text-2xl font-bold mb-4 pt-4'>Let's stay in touch!</h3>
+          <h3 className='text-2xl font-bold mb-4 pt-4 text-neutral-800'>Let's stay in touch!</h3>
           <div className='flex items-center w-full justify-center'>
-            <EmailQuestion placeholder='address@example.com' className='flex-row gap-3 justify-center w-full' submitButtonText='Submit' sendEmail={sendEmail} />
+            <EmailQuestion placeholder='address@example.com' className='flex-row gap-3 justify-center w-full ' submitButtonText='Submit' sendEmail={sendEmail} />
           </div>
         </div>
       )}
-      <h3 className='text-2xl font-bold mb-4 pt-4'>Export your response</h3>
-      <div className='flex items-center justify-center'>
+      <h3 className='text-2xl font-bold mb-4 pt-4 text-neutral-800'>Export your response</h3>
+      <div className='flex items-center justify-center gap-8'>
         <button
           onClick={downloadResponse}
-          className="px-4 py-2 w-1/3 bg-blue-600 text-white font-semibold rounded transition-colors shadow-md hover:bg-blue-700 focus:outline-none"
+          className="px-4 py-2 w-1/3 bg-frisco_purple text-white font-semibold rounded shadow-md transition-colors hover:bg-frisco_purple_light focus:outline-none"
         >
           Download CSV
         </button>
+        {/* <button
+          onClick={downloadPdf}
+          className="px-4 py-2 w-1/3 bg-frisco_purple text-white font-semibold rounded shadow-md transition-colors hover:bg-frisco_purple_light focus:outline-none"
+        >
+          Download PDF
+        </button> */}
       </div>
+
 
     </div>
   );

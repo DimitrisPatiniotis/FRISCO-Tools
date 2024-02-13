@@ -39,19 +39,19 @@ const OptionQuestion: React.FC<OptionQuestionProps> = ({ options, sendOption }) 
                                 onChange={() => handleRadioChange(option.id)}
                             />
                             {selectedOptionId === option.id ? (
-                                <span className="relative flex items-center justify-center w-4 h-4 border border-gray-300 rounded bg-white cursor-pointer">
-                                    <IonIcon icon="checkmark-outline" className="absolute text-blue-800 font-semibold" />
+                                <span className="relative flex items-center justify-center w-4 h-4 border border-frisco_orange rounded bg-frisco_orange cursor-pointer">
+                                    <IonIcon icon="checkmark-outline" className="absolute text-white font-semibold" />
                                 </span>
                             ) : (
-                                <span className="relative flex items-center justify-center w-4 h-4 border border-gray-300 rounded  cursor-pointer">
+                                <span className="relative flex items-center justify-center w-4 h-4 border border-frisco_orange rounded  cursor-pointer">
                                 </span>
                             )}
-                            <span className='ml-1'>{option.text}</span>
+                            <span className='ml-1 text-neutral-800'>{option.text}</span>
                         </label>
                     </li>
                 ))}
             </ul>
-            <button onClick={handleSubmit} className="px-4 py-2 bg-blue-600 text-white font-semibold rounded transition-colors shadow-md hover:bg-blue-700 focus:outline-none">
+            <button onClick={handleSubmit} className="px-4 py-2 bg-frisco_purple text-white font-semibold rounded transition-colors shadow-md hover:bg-frisco_purple_light focus:outline-none">
                 Next
             </button>
         </div>

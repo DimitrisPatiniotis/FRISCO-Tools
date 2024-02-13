@@ -101,32 +101,35 @@ const Question: React.FC<QuestionaireIntroProps> = ({ questionaireId, responseId
     return (
         <div>
             <ProgressBar totalQuestions={total_questions} currentQuestion={questionPos} />
-            <div className="question-container">
+            <div className='flex'>
+                <div className="question-container">
+                    <div className={`question-slide ${inTransition ? 'question-slide-exit-active' : 'question-slide-enter-active'}`}>
 
-                <div className={`question-slide ${inTransition ? 'question-slide-exit-active' : 'question-slide-enter-active'}`}>
-
-                    <h3 className='text-lg'>{questionCategory}</h3>
-                    <h1 className='mb-2 text-2xl question-title'>
-                        <div className='w-full'>
-                            {continueState === 'start' ? questionChangeSwitch : questionPos}.  {description}
-                        </div>
-                        {(questionDescription &&
-                            <div  className='ml-5 h-full'>
-                                <Tooltip title={description} text={questionDescription} />
+                        <h3 className='text-lg text-frisco_purple'>{questionCategory}</h3>
+                        <h1 className='mb-2 text-1.5xl question-title text-neutral-800'>
+                            <div className='w-full'>
+                                {continueState === 'start' ? questionChangeSwitch : questionPos}.  {description}
                             </div>
-                        )}
-                    </h1>
 
-                    {question_type === 'multiple_select' ? (<MultipleSelectProps options={question_options} sendOptions={(selected_options) => sendOptionAnswer(undefined, undefined, undefined, undefined, undefined, undefined, selected_options)} />) : null}
-                    {question_type === 'multiple_choice' ? (<OptionQuestion options={question_options} sendOption={sendOptionAnswer} />) : null}
-                    {question_type === 'open_ended' ? (<OpenEndedQuestion sendOption={(text) => sendOptionAnswer(undefined, text)} />) : null}
-                    {question_type === 'email' ? (<EmailQuestion className='flex-col' sendEmail={(email) => sendOptionAnswer(undefined, undefined, email)} />) : null}
-                    {question_type === 'file' ? (<FileQuestion sendFile={(file) => sendOptionAnswer(undefined, undefined, undefined, file)} />) : null}
-                    {question_type === 'phone' ? (<PhoneQuestion sendPhone={(phone) => sendOptionAnswer(undefined, undefined, undefined, undefined, phone)} />) : null}
-                    {question_type === 'text' ? (<SmallTextQuestion sendText={(small_text) => sendOptionAnswer(undefined, undefined, undefined, undefined, undefined, small_text)} />) : null}
+                        </h1>
+
+                        {question_type === 'multiple_select' ? (<MultipleSelectProps options={question_options} sendOptions={(selected_options) => sendOptionAnswer(undefined, undefined, undefined, undefined, undefined, undefined, selected_options)} />) : null}
+                        {question_type === 'multiple_choice' ? (<OptionQuestion options={question_options} sendOption={sendOptionAnswer} />) : null}
+                        {question_type === 'open_ended' ? (<OpenEndedQuestion sendOption={(text) => sendOptionAnswer(undefined, text)} />) : null}
+                        {question_type === 'email' ? (<EmailQuestion className='flex-col' sendEmail={(email) => sendOptionAnswer(undefined, undefined, email)} />) : null}
+                        {question_type === 'file' ? (<FileQuestion sendFile={(file) => sendOptionAnswer(undefined, undefined, undefined, file)} />) : null}
+                        {question_type === 'phone' ? (<PhoneQuestion sendPhone={(phone) => sendOptionAnswer(undefined, undefined, undefined, undefined, phone)} />) : null}
+                        {question_type === 'text' ? (<SmallTextQuestion sendText={(small_text) => sendOptionAnswer(undefined, undefined, undefined, undefined, undefined, small_text)} />) : null}
+                    </div>
                 </div>
-
+                {(questionDescription &&
+                    <div className='mt-8 ml-5 tooltip-container'>
+                        <Tooltip title={description} text={questionDescription} />
+                    </div>
+                )}
             </div>
+
+
         </div>
     )
 }

@@ -31,7 +31,7 @@ const OpenEndedQuestion: React.FC<OptionQuestionProps> = ({ sendOption }) => {
       
       <button
         onClick={handleSubmit}
-        className="px-4 py-2 bg-blue-600 text-white font-semibold rounded focus:outline-none  transition-colors shadow-md hover:bg-blue-700 outline-none"
+        className="px-4 py-2 bg-frisco_purple text-white font-semibold rounded focus:outline-none  transition-colors shadow-md hover:bg-blue-700 outline-none"
       >
         Next
       </button>

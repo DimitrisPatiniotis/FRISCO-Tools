@@ -27,28 +27,14 @@ class QuestionnaireByTitleView(APIView):
     
 class QuestionDetailView(APIView):
     def get(self, request, questionnaire_id, responseId):
+
         print(responseId)
         try:
             response = Response.objects.get(questionnaire_id=questionnaire_id, cookie_id=responseId)
         except Response.DoesNotExist:
             response = Response.objects.create(questionnaire_id=questionnaire_id, old_cookie_id=responseId ,cookie_id=responseId)
-
-        last_answered_question = (
-            Answer.objects.filter(response=response)
-            .filter(question__questionnaire_id=questionnaire_id, question__active=True)
-            .order_by('-question__position')
-            .first()
-        )
-        try:
-            if last_answered_question and last_answered_question.question.type == 'multiple_choice':
-                if last_answered_question.option and last_answered_question.option.goto != -1:
-                    unanswered_question = Question.objects.filter(questionnaire_id=questionnaire_id, active=True, position=last_answered_question.option.goto).exclude(answer__response=response).first()
-                else:
-                    unanswered_question = Question.objects.filter(questionnaire_id=questionnaire_id, active=True).exclude(answer__response=response).order_by('position').first()
-            else:
-                unanswered_question = Question.objects.filter(questionnaire_id=questionnaire_id, active=True).exclude(answer__response=response).order_by('position').first()
-        except:
-            unanswered_question = Question.objects.filter(questionnaire_id=questionnaire_id, active=True).exclude(answer__response=response).order_by('position').first()
+        
+        unanswered_question = Question.objects.filter(questionnaire_id=questionnaire_id, active=True).exclude(answer__response=response).order_by('position').first()
 
         if unanswered_question:
             response_data = {
@@ -88,24 +74,16 @@ class AnswerCreateView(APIView):
                 answer.option = option
                 answer.save_with_update()
 
-                # Skip other choices, mark as answered
-                other_options = Option.objects.filter(question=question).exclude(id=option_id)
+                if answered_option_goto != -1:
 
-                for option in other_options:
-                    if option.goto != answered_option_goto:
-                        if option.goto != -1 :
-                            skipped_question = Question.objects.filter(questionnaire=response.questionnaire, active=True, position=option.goto).first()
-                            if skipped_question:
-                                skipped_answer, created = Answer.objects.get_or_create(response=response, question=skipped_question)
-                                skipped_answer.skipped = True
-                                skipped_answer.save_with_update()
-                        else:
-                            skipped_question = Question.objects.filter(questionnaire=response.questionnaire, active=True, position=question.position + 1).first()
-                            if skipped_question:
-                                skipped_answer, created = Answer.objects.get_or_create(response=response, question=skipped_question)
-                                skipped_answer.skipped = True
-                                skipped_answer.save_with_update()
-        
+                    for i in range(question.position, answered_option_goto):
+                        print(i)
+                        skipped_question = Question.objects.filter(questionnaire=response.questionnaire, active=True, position=i).first()
+                        if skipped_question:
+                            skipped_answer, created = Answer.objects.get_or_create(response=response, question=skipped_question)
+                            skipped_answer.skipped = True
+                            skipped_answer.save_with_update()
+
         elif question.type == 'multiple_select':
             selected_options = request.data.get('selected_options')
             if selected_options is not None:
@@ -465,12 +443,23 @@ class ResponderDownloadResponse(APIView):
                 return response
         except Response.DoesNotExist:
             return RestResponse({"error": "Response not found"}, status=status.HTTP_404_NOT_FOUND)
-        
+
+class ResponderDownloadPdf(APIView):
+    def get(self, request, cookie_id):
+        try:
+            response = Response.objects.get(old_cookie_id=cookie_id)
+            export_filename = response.get_pdf()
+            if export_filename:
+                response = FileResponse(open(export_filename, 'rb'))
+                response['Content-Disposition'] = f'attachment; filename="{export_filename}"'
+                return response
+        except Response.DoesNotExist:
+            return RestResponse({"error": "Response not found"}, status=status.HTTP_404_NOT_FOUND)
+  
 class ResponderResponseScore(APIView):
     def get(self, request, response_id):
         try:
             response = Response.objects.get(old_cookie_id=response_id)
-            print(response.get_score)
             return RestResponse({"score": response.get_score}, status=status.HTTP_200_OK)
         except Response.DoesNotExist:
             return RestResponse({"error": "Response not found"}, status=status.HTTP_404_NOT_FOUND)

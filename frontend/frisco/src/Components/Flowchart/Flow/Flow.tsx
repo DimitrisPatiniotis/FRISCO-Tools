@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from "react";
+import FlowchartLogo from "../FlowchartLogo/FlowchartLogo";
 import { toPng } from 'html-to-image';
 import ReactFlow, {
     Node,
@@ -16,6 +17,8 @@ import ReactFlow, {
     getTransformForBounds,
 } from "reactflow";
 
+
+
 import { nodeInfo_1, initialEdges_1, stateToQuestions } from '../ChartNodesInfo/ChartNodesInfoUpdated';
 
 import FlowController from "../FlowController/FlowController";
@@ -23,6 +26,7 @@ import { DiamondNode, RectangleNode } from "../CustomNode/CustomNode";
 
 import "reactflow/dist/style.css";
 import { set } from "date-fns";
+import { t } from "i18next";
 
 const nodeTypes = {
     diamondNode: DiamondNode,
@@ -32,7 +36,7 @@ const nodeTypes = {
 const BasicFlow = () => {
     const [flowControllerState, setFlowControllerState] = useState<number[]>([1])
     const [flowInstance, setFlowInstance] = useState<ReactFlowInstance>({} as ReactFlowInstance);
-    const [newNodesNum, setNewNodesNum] = useState<number[]>([]);
+    const [lastAdded, setLastAdded] = useState<number[]>([1]);
     const [load, setLoad] = useState(0);
 
     const filteredNodes = Object.keys(nodeInfo_1)
@@ -47,7 +51,7 @@ const BasicFlow = () => {
 
     const handleSetAnswer = (answer: { answer_text: string; answer_add: number[]; }) => {
         const updatedFlowControllerState = [...flowControllerState, ...answer.answer_add];
-        setNewNodesNum(answer.answer_add);
+        setLastAdded(lastAdded.concat(answer.answer_add))
         setFlowControllerState(updatedFlowControllerState);
     };
 
@@ -66,9 +70,12 @@ const BasicFlow = () => {
             setLoad(load + 1);
             return;
         }
+        console.log(lastAdded)
+
         setTimeout(() => {
             flowInstance.fitView({
-                nodes: nodes.filter(node => newNodesNum.includes(+node.id)),
+                nodes: nodes.filter(node => lastAdded.slice(-3).includes(+node.id)),
+
                 duration: 1000,
             });
         }, 0);
@@ -93,9 +100,7 @@ const BasicFlow = () => {
 
             setTimeout(() => {
                 const nodesBounds = getRectOfNodes(nodes);
-                console.log(nodesBounds);
                 const transform = getTransformForBounds(nodesBounds, imageWidth, imageHeight, 0.375, 2);
-                console.log(transform);
                 toPng(viewportElement, {
                     backgroundColor: '#fff',
                     width: imageWidth,
@@ -123,8 +128,12 @@ const BasicFlow = () => {
                 nodeTypes={nodeTypes}
                 fitView={true}
                 minZoom={0.05}
+                edgesFocusable={false}
+                nodesDraggable={false}
+                nodesConnectable={false}
+                draggable={false}
+                elementsSelectable={false}
                 onInit={(instance) => setFlowInstance(instance)}
-
             >
                 <Panel position={'top-right'}>
                     <FlowController
@@ -138,7 +147,9 @@ const BasicFlow = () => {
                 <Background />
                 <Controls />
                 <MiniMap zoomable pannable />
+                <FlowchartLogo />
             </ReactFlow>
+
         </div>
     );
 };

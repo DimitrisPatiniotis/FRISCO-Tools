@@ -4,9 +4,10 @@ interface NumberCounterProps {
   endValue: number;
   duration: number;
   decimals?: number;
+  text_class?: string;
 }
 
-const NumberCounter: React.FC<NumberCounterProps> = ({ endValue, duration, decimals = 0 }) => {
+const NumberCounter: React.FC<NumberCounterProps> = ({ endValue, duration, decimals = 0, text_class='' }) => {
   const [count, setCount] = useState(0);
   const step = (endValue / duration) * 80;
 
@@ -28,7 +29,7 @@ const NumberCounter: React.FC<NumberCounterProps> = ({ endValue, duration, decim
 
   return (
     <div>
-      <p>{count.toFixed(decimals)}</p>
+      <p className={text_class}>{count.toFixed(decimals)}</p>
     </div>
   );
 };

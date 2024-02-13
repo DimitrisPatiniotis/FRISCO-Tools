@@ -23,6 +23,9 @@ module.exports = {
 
       colors: {
         main: "#2A69CE",
+        frisco_purple: "#2400a2",
+        frisco_purple_light: "rgb(82,42,214)",
+        frisco_orange: "#f76b00",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -61,6 +64,9 @@ module.exports = {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      fontSize: {
+        "1.5xl" : '1.375rem',
       },
       keyframes: {
         "accordion-down": {

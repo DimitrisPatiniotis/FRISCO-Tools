@@ -8,7 +8,11 @@ from .utils import *
 import threading
 import pandas as pd
 from django.db import transaction
-from collections import defaultdict
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.platypus import Paragraph
+from textwrap import wrap
 
 
 class Questionnaire(models.Model):
@@ -274,7 +278,7 @@ class Response(models.Model):
 
     @property
     def get_score(self):
-        answers = self.answer_set.all()
+        answers = self.answer_set.filter(skipped=False)
         score = 0
         for i in answers:
             if i.question.type != 'multiple_choice' and i.question.type != 'multiple_select':
@@ -288,14 +292,20 @@ class Response(models.Model):
 
     def get_csv(self):
         question_answers = (
-            Answer.objects.filter(response=self)
+            Answer.objects.filter(response=self, skipped=False)
             .select_related('question')
             .order_by('question__position')
         )
+        response_data=[]
+        for answer in question_answers:
+            if answer.question.type == 'multiple_choice':
+                response_data.append([answer.question.text, answer.get_value, answer.option.weight])
+            elif answer.question.type == 'multiple_select':
+                response_data.append([answer.question.text, answer.get_value, sum([o.weight for o in answer.options.all()])])
+            else:
+                # TO BE ADDED: handle other question types
+                pass
 
-        response_data = [
-            [answer.question.text, answer.get_value, answer.option.weight] for answer in question_answers
-        ]
 
         columns = ["Question", "Answer", "Score"]
         df = pd.DataFrame(response_data, columns=columns)
@@ -305,6 +315,83 @@ class Response(models.Model):
         export_filename = f'{self.id}_response_data.csv'
         df.to_csv(export_filename, index=False)
         return export_filename
+    
+    def get_pdf(self):
+        from io import BytesIO
+
+        # Create a BytesIO buffer to store the PDF content
+        buffer = BytesIO()
+
+        # Create a PDF document with letter size and portrait orientation
+        pdf = canvas.Canvas(buffer, pagesize=letter)
+
+        y_position = 750
+        available_space = 700
+        max_width = 405
+        
+        # Add content to the PDF using Paragraph for better text wrapping
+        styles = getSampleStyleSheet()
+        normal_style = styles['Normal']
+        question_style = ParagraphStyle(
+            'QuestionStyle',
+            parent=normal_style,
+            spaceAfter=10,
+            fontSize=12,
+        )
+
+        # Add questions and answers to the PDF in order
+        question_answers = (
+            Answer.objects.filter(response=self, skipped=False)
+            .select_related('question')
+            .order_by('question__position')
+        )
+        last_question_height, last_answer_height = 0, 0
+
+        for answer in question_answers:
+
+
+            # Truncate the text to fit within the maximum width
+            question_text = answer.question.text
+            answer_text = answer.get_value
+
+            # Wrap the text to avoid overflow
+            wrapped_question_text = "\n".join(wrap(question_text, 80))
+            wrapped_answer_text = "\n".join(wrap(answer_text, 80))
+
+            # Add the wrapped text to the PDF using Paragraph
+            question_paragraph = Paragraph(f"Question: {wrapped_question_text}", question_style)
+            answer_paragraph = Paragraph(f"Answer: {wrapped_answer_text}", normal_style)
+
+            # Draw the paragraphs to the canvas
+            question_paragraph.wrapOn(pdf, max_width, available_space)
+            answer_paragraph.wrapOn(pdf, max_width, available_space)
+
+            # Check if there's enough space for the current question-answer pair
+            if y_position <= question_paragraph.height + answer_paragraph.height + 20:
+                pdf.showPage()  # Start a new page
+                y_position = 720
+                # Reset Y position for the new page
+
+            question_paragraph.drawOn(pdf, 100, y_position)
+            answer_paragraph.drawOn(pdf, 100, y_position - 10 - answer_paragraph.height)
+            
+            y_position -=  (question_paragraph.height + answer_paragraph.height) * 2
+
+        # Add more content based on your requirements
+
+        # Save the PDF to the buffer
+        pdf.save()
+
+        # Set the buffer position to the beginning
+        buffer.seek(0)
+
+        # Save the PDF to a file
+        export_filename = f'{self.id}_response_data.pdf'
+        with open(export_filename, 'wb') as pdf_file:
+            pdf_file.write(buffer.read())
+
+        return export_filename
+
 
 
 class Answer(models.Model):

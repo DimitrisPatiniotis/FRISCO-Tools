@@ -7,6 +7,8 @@ import QuestionaireOutro from '../QuestionaireOutro/QuestionaireOutro';
 import './QuestionaireWrapper.css';
 import { useAuthContext } from '../../utils/useAuthContext';
 
+import Logo from '../../assets/images/logos/Final-logo-Frisco-scaled.png';
+
 const QuestionaireWrapper = () => {
   const { user } = useAuthContext(); 
   const [questionaire, setQuestionaire] = useState(1);
@@ -55,8 +57,12 @@ const QuestionaireWrapper = () => {
 
 
   return (
-    <div className='questionaire-wrapper'>
-      <div className='questionaire-wrapper-background'></div>
+    
+    <div className='min-h-100vh w-full flex items-center justify-center z-0 questionaire-wrapper '>\
+      <div className='absolute m-[15px] top-0 left-0'>
+        <img src={Logo} className='w-52' />
+      </div>
+      <div className=''></div>
       <div className='questionaire-inner'>
         {questionaireState === 'intro' ? ( <QuestionaireIntro questionaireId={questionaire} continueS={continueState} onButtonClick={changeQuestionState} />) : null} 
         {questionaireState === 'question' ? ( <Question continueState={continueState} questionaireId={questionaire} responseId={response_id} onEnd={(changeQuestionState)} />) : null}

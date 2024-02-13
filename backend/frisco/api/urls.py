@@ -34,6 +34,7 @@ urlpatterns = [
     path('get_basic_admin_stats/', GetBasicStats.as_view(), name='get_basic_admin_stats'),
     path('download_response/<int:res_id>/', DownloadResponse.as_view(), name='download_response'),
     path('user_download_response/<str:cookie_id>/', ResponderDownloadResponse.as_view(), name='user_download_response'),
+    path('user_download_pdf/<str:cookie_id>/', ResponderDownloadPdf.as_view(), name='user_download_response'),
     path('response/<str:response_id>/get_score/', ResponderResponseScore.as_view(), name='response_view'),
     
     # Authentication

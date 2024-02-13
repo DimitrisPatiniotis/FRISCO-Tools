@@ -4,6 +4,7 @@ interface NodeInfo {
     [key: number]: {
         id: string;
         type: string;
+
         data: {
             incomingHandleTop?: boolean;
             incomingHandleRight?: boolean;
@@ -34,6 +35,8 @@ interface NodeInfo {
             font_size?: string,
             border_radius?: string,
             node_padding?: string
+
+
         };
         position: { x: number; y: number };
     };
@@ -56,13 +59,14 @@ export const nodeInfo_1: NodeInfo = {
     1: {
         id: '1',
         type: 'diamondNode',
-        data: { outgoingHandleTop: true, outgoingHandleBottom: true, label: 'Have you ever encountered terrorist content on your platform?', id: '1', background_color: 'rgb(198,230,255)', text_color: 'black', text_translate: 'translateY(55px)', node_height: '180px', node_width: '180px', font_size: '15px', node_margins: '-2px 32px' },
+
+        data: { outgoingHandleTop: true, outgoingHandleBottom: true, label: 'Are you an HSP offering its services in the EU that has been ‘exposed to terrorist content’?', id: '1', background_color: 'rgb(198,230,255)', text_color: 'black', text_translate: 'translateY(68px)', node_height: '190px', node_width: '190px', font_size: '15px', node_margins: '-2px 22px' },
         position: { x: 0, y: -80 },
     },
     2: {
         id: '2',
         type: 'rectangleNode',
-        data: { incomingHandleTop: true, outgoingHandleRight: true, label: 'Do you think you might encounter terrorist content on your platform in the future?', id: '2', background_color: 'rgb(198,230,255)', text_color: 'black', node_height: '100px', node_width: '400px', border_radius: '20px', node_margins: '0', font_size: '12px' },
+        data: { incomingHandleTop: true, outgoingHandleRight: true, label: 'Are you an HSP who wants to know what to do when exposed to terrorist content?', id: '2', background_color: 'rgb(198,230,255)', text_color: 'black', node_height: '100px', node_width: '400px', border_radius: '20px', node_margins: '0', font_size: '12px' },
         position: { x: -100, y: lowFlowLineY },
 
     },
@@ -98,7 +102,7 @@ export const nodeInfo_1: NodeInfo = {
     7: {
         id: '7',
         type: 'diamondNode',
-        data: { handleLeft: true, outgoingHandleTop: true, outgoingHandleRight: true, label: 'Are compliant with the TCO Regulation ?', id: '7', background_color: 'rgb(198,230,255)', text_color: 'black', text_translate: 'translateY(65px)', node_height: '170px', node_width: '170px', font_size: '14px', node_margins: '-2px 32px' },
+        data: { handleLeft: true, outgoingHandleTop: true, outgoingHandleRight: true, label: 'Are compliant with the TCO Regulation?', id: '7', background_color: 'rgb(198,230,255)', text_color: 'black', text_translate: 'translateY(65px)', node_height: '170px', node_width: '170px', font_size: '14px', node_margins: '-2px 32px' },
         position: { x: 1900, y: lowFlowLineY - 35 },
     },
     8: {
@@ -141,19 +145,19 @@ export const nodeInfo_1: NodeInfo = {
     14: {
         id: '14',
         type: 'rectangleNode',
-        data: { incomingHandleTop: true, outgoingHandleBottom: true, label: 'Accessible and user-friendly reporting mechanisms', id: '14', background_color: 'rgb(252,227,135)', node_height: '100px', node_width: '340px', border_radius: '10px', node_margins: '0' },
+        data: { incomingHandleTop: true, outgoingHandleBottom: true, label: 'Accessible and user-friendly reporting mechanisms: This can be a simple form or a dedicated email address.', id: '14', background_color: 'rgb(252,227,135)', node_height: '100px', node_width: '340px', border_radius: '10px', node_margins: '0' },
         position: { x: 2740, y: highFlowLineY + 530 },
     },
     15: {
         id: '15',
         type: 'rectangleNode',
-        data: { incomingHandleTop: true, outgoingHandleBottom: true, label: 'Mechanisms to increase awareness about the TCO', id: '15', background_color: 'rgb(252,227,135)', node_height: '72px', node_width: '340px', border_radius: '10px', node_margins: '0', node_padding: '10px' },
+        data: { incomingHandleTop: true, outgoingHandleBottom: true, label: 'Mechanisms to increase the awareness of terrorist content on services, such as mechanisms for user moderation', id: '15', background_color: 'rgb(252,227,135)', node_height: '78px', node_width: '340px', border_radius: '10px', node_margins: '0', node_padding: '10px' },
         position: { x: 2640, y: highFlowLineY + 775 },
     },
     16: {
         id: '16',
         type: 'rectangleNode',
-        data: { incomingHandleTop: true, outgoingHandleBottom: true, handleRight: true, label: 'Any other measures to address the dissemination of terrorist content on your services', id: '16', background_color: 'rgb(252,227,135)', node_height: '78px', node_width: '360px', border_radius: '10px', node_margins: '0', node_padding: '10px' },
+        data: { incomingHandleTop: true, outgoingHandleBottom: true,  label: 'Any other measures to address the dissemination of terrorist content on your services: This can be through accessing the GIFCT hash sharing database, or through engaging with the FRISCO project.', id: '16', background_color: 'rgb(252,227,135)', node_height: '140px', node_width: '360px', border_radius: '10px', node_margins: '0', node_padding: '10px' },
         position: { x: 2740, y: highFlowLineY + 980 },
     },
     17: {
@@ -179,7 +183,7 @@ export const nodeInfo_1: NodeInfo = {
     20: {
         id: '20',
         type: 'rectangleNode',
-        data: { incomingHandleTop: true, outgoingHandleBottom: true, label: "Measures must be targeted and proportionate (icapabilities,financial resources, number of users, content available...)", id: '20', background_color: 'rgb(252,227,135)', node_height: '100px', node_width: '340px', border_radius: '10px', node_margins: '0', node_padding: '10px' },
+        data: { incomingHandleTop: true, outgoingHandleBottom: true, label: "Measures must be targeted and proportionate (capabilities, financial resources, number of users, content available...)", id: '20', background_color: 'rgb(252,227,135)', node_height: '100px', node_width: '340px', border_radius: '10px', node_margins: '0', node_padding: '10px' },
         position: { x: 3960, y: highFlowLineY + 530 },
     },
 
@@ -791,16 +795,24 @@ export const initialEdges_1: Edge[] = [
 
 export const stateToQuestions: StateToQuestions = {
     1: {
-        question: 'Have you ever encountered terrorist content on your platform?',
+        question: 'Are you an HSP offering its services in the EU that has been ‘exposed to terrorist content’?',
         answers: [{ answer_text: 'Yes', answer_add: [40] }, { answer_text: 'No', answer_add: [2] }]
     },
     40: {
         question: 'How was the terrorist content detected?',
         answers: [
-            { answer_text: 'In house tools & Monitoring', answer_add: [41, 43, 10, 11, 12, 13] },
-            { answer_text: 'User Notices', answer_add: [42, 43, 10, 11, 12, 13] },
+            { answer_text: 'In house tools & Monitoring', answer_add: [41, 43] },
+            { answer_text: 'User Notices', answer_add: [42, 43] },
             { answer_text: 'LEA\'s', answer_add: [44, 45, 46] }
         ]
+    },
+    43: {
+        question: 'Next steps depend of the tools you are using',
+        answers: [{ answer_text: 'Got It!', answer_add: [10, 11, 12, 13]}]
+    },
+    12: {
+        question: 'Let\'s look at the types of specific measures you can take',
+        answers: [{ answer_text: 'Continue', answer_add: [13]}]
     },
     2: {
         question: 'Do you think you might encounter terrorist content on your platform in the future?',
@@ -832,17 +844,17 @@ export const stateToQuestions: StateToQuestions = {
         answers: [{ answer_text: 'Got It!', answer_add: [14] }]
     },
     14: {
-        question: 'Accessible and user-friendly reporting mechanisms',
+        question: 'Accessible and user-friendly reporting mechanisms: This can be a simple form or a dedicated email address.',
         answers: [{ answer_text: 'Got It!', answer_add: [15] }]
     },
 
     15: {
-        question: 'Mechanisms to increase awareness about the TCO',
+        question: 'Mechanisms to increase the awareness of terrorist content on services, such as mechanisms for user moderation',
         answers: [{ answer_text: 'Got It!', answer_add: [16] }]
     },
 
     16: {
-        question: 'Any other measures to address the dissemination of terrorist content on your services',
+        question: 'Any other measures to address the dissemination of terrorist content on your services: This can be through accessing the GIFCT hash sharing database, or through engaging with the FRISCO project.',
         answers: [{ answer_text: 'Got It!', answer_add: [17, 18, 19] }]
     },
 
@@ -852,7 +864,7 @@ export const stateToQuestions: StateToQuestions = {
     },
 
     20: {
-        question: 'Measures must be targeted and proportionate (icapabilities,financial resources, number of users, content available...)',
+        question: 'Measures must be targeted and proportionate (capabilities,financial resources, number of users, content available...)',
         answers: [{ answer_text: 'Got It!', answer_add: [21] }]
     },
     21: {
@@ -885,7 +897,7 @@ export const stateToQuestions: StateToQuestions = {
     },
 
     30: {
-        question: 'Do you publish a yearly transparency report?',
+        question: 'Do you publish a yearly transparency report? <br> <div style="font-size: 0.9rem;">Do you need help building your transparency reports? Consider checking the following examples from Big Tech:</div> <a href="https://www.tiktok.com/transparency/en/tco-report/?enter_method=left_navigation" style="font-size: 0.9rem; color: #2400a2;">Tiktok</a><br><a href="https://transparency.fb.com/sr/eu-online-report-ig-feb28-23" style="font-size: 0.9rem; color: #2400a2;">Instagram</a><br><a href="https://transparency.fb.com/sr/eu-online-report-fb-feb28-23" style="font-size: 0.9rem; color: #2400a2;">Facebook</a><br><a href="https://safety.twitch.tv/s/article/2022-EU-Terrorist-Content-Transparency-Report?language=en_US" style="font-size: 0.9rem; color: #2400a2;">Twitch</a><br><a href="https://transparency.automattic.com/tumblr/eu-terrorist-content-removal-orders/" style="font-size: 0.9rem; color: #2400a2;">Automattic</a>',
         answers: [{ answer_text: "Yes", answer_add: [32, 33] }, { answer_text: "No", answer_add: [31, 32, 33] }]
     },
     33: {
@@ -968,7 +980,16 @@ export const stateToQuestions: StateToQuestions = {
     },
     83: {
         question: "Have you informed the user that its appeal was rejected and provided an explainer?",
-        answers: [{ answer_text: "Yes", answer_add: [85, 92, 87, 88, 31, 32, 33]}, {answer_text:"No", answer_add:[84, 85, 92, 87, 88, 31, 32, 33]}]
+        answers: [{ answer_text: "Yes", answer_add: [85, 92]}, {answer_text:"No", answer_add:[84, 85, 92]}]
+    },
+    92: {
+        question: "What should you do next?",
+        answers: [{answer_text: "Continue", answer_add:[87, 88, 31]}]
+        
+    },
+    31: {
+        question: "You must publish a yearly transparency report about measures you took to identify and remove terrorist content",
+        answers: [{answer_text: "Got It", answer_add:[32, 33]}]
     },
     89: {
         question: "You can now download the whole process map",

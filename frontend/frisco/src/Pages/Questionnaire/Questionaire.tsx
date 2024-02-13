@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import AdditionalInfo from '../../Components/AdditionalInfo/AdditionalInfo';
 import Intro from '../../Components/Intro/Intro';
 import QuestionaireWrapper from '../../Components/QuestionaireWrapper/QuestionaireWrapper';
 import './Questionaire.css';
@@ -10,7 +9,7 @@ const Questionaire = () => {
       setMode(newMode);
     };
     return (
-        <div className="h-screen bg-main-q text-white flex flex-col items-center justify-center">
+        <div className="h-screen bg-neutral-50 text-white flex flex-col items-center justify-center">
           {mode === 'intro' ? (<Intro onButtonClick={handleButtonClick} />) : (<QuestionaireWrapper />)}
           {/* <AdditionalInfo /> */}
         </div>

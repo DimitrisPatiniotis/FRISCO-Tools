@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { IonIcon } from '@ionic/react';
+import './MultipleSelectQuestion.css';
 
 interface Option {
     id: number;
@@ -30,10 +31,10 @@ const MultipleSelectQuestion: React.FC<MultipleSelectProps> = ({ options, sendOp
     };
     return (
         <div>
-            <ul className='mb-3'>
+            <ul className='mb-3 flex flex-col gap-1'>
                 {options.map((option) => (
-                    <li key={option.id} className='mb-1'>
-                        <label className="inline-flex items-center cursor-pointer">
+                    <li key={option.id} className=''>
+                        <label className="inline-flex items-center cursor-pointer gap-2">
                             <input
                                 type="checkbox"
                                 className="hidden"
@@ -41,24 +42,28 @@ const MultipleSelectQuestion: React.FC<MultipleSelectProps> = ({ options, sendOp
                                 onChange={() => handleCheckboxChange(option.id)}
                             />
                             {selectedOptionsIds.includes(option.id) ? (
-                                <span className="relative flex items-center justify-center w-4 h-4 border border-gray-300 rounded bg-white cursor-pointer">
-                                    <IonIcon icon="checkmark-outline" className="absolute text-blue-800 font-semibold" />
-                                </span>
+                                <div className="relative flex items-center justify-center w-4 h-4 border border-frisco_orange rounded bg-frisco_orange cursor-pointer custom-checkbox">
+                                    <IonIcon icon="checkmark-outline" className="absolute text-white font-semibold" />
+                                </div>
                             ) : (
-                                <span className="relative flex items-center justify-center w-4 h-4 border border-gray-300 rounded cursor-pointer">
-                                </span>
+                                <div className=" flex items-center justify-center w-4 h-4 border border-frisco_orange rounded cursor-pointer custom-checkbox">
+                                </div>
+
                             )}
-                            <span className='ml-1'>{option.text}</span>
+                            <div className='multiple-option-text text-neutral-800 select-none'>{option.text}</div>
+
                         </label>
+
+
                     </li>
                 ))}
             </ul>
             <button
                 onClick={handleSubmit}
-                className={`px-4 py-2  text-white font-semibold rounded transition-colors bg-blue-600 shadow-md focus:outline-none ${isSubmitDisabled ? '' : 'hover:bg-blue-700'}`}
+                className={`px-4 py-2  text-white font-semibold rounded transition-colors bg-frisco_purple shadow-md focus:outline-none ${isSubmitDisabled ? '' : 'hover:bg-frisco_purple_light'}`}
                 disabled={isSubmitDisabled}
             >
-                Submit
+                Next
             </button>
         </div>
     );
