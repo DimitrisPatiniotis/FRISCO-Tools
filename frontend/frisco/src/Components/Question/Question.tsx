@@ -38,7 +38,7 @@ const Question: React.FC<QuestionaireIntroProps> = ({ questionaireId, responseId
     const [question_options, setQuestionOptions] = useState<Option[]>([]);
     const [question_id, setQuestionId] = useState<number>(0);
     const [total_questions, setTotalQuestions] = useState<number>(0);
-    const [answerIds, setAnswerIds] = useState<number[] | []>([]);
+    const [lastAnswerId, setLastAnswerId] = useState<number|undefined>(undefined);
 
     const sendOptionAnswer = async (option_id?: number, text?: string, email?: string, file?: File, phone?: string, small_text?: string, selected_options?: number[]) => {
         try {
@@ -60,8 +60,7 @@ const Question: React.FC<QuestionaireIntroProps> = ({ questionaireId, responseId
                 const selectedOptionsStrings = selected_options.map(optionId => optionId.toString());
                 formData.append('selected_options', selectedOptionsStrings.join(','));
             }
-            const response = await axios.post(`${ACTIVE_URL}/api/answer/${responseId}/${question_id}/`, formData);
-            setAnswerIds(prevAnswerIds => [...prevAnswerIds, response.data.answer.id]);
+            await axios.post(`${ACTIVE_URL}/api/answer/${responseId}/${question_id}/`, formData);
             setInTransition(true);
             setTimeout(() => {
                 setQuestionChangeSwitch(questionChangeSwitch + 1);
@@ -76,9 +75,8 @@ const Question: React.FC<QuestionaireIntroProps> = ({ questionaireId, responseId
 
     const deleteAnswer = async () => {
     try {
-        if (answerIds.length > 0) {
-              const response = await axios.delete(`${ACTIVE_URL}/api/answer/${answerIds[answerIds.length - 1]}/`);
-              setAnswerIds(prevAnswerIds => prevAnswerIds.slice(0, -1));
+        if (lastAnswerId) {
+              await axios.delete(`${ACTIVE_URL}/api/answer/${lastAnswerId}/`);
               setInTransition(true);
               setTimeout(() => {
                 setQuestionChangeSwitch(questionChangeSwitch - 1);
@@ -102,6 +100,7 @@ const Question: React.FC<QuestionaireIntroProps> = ({ questionaireId, responseId
                 if (data['end']) {
                     onEnd('end');
                 }
+                setLastAnswerId(data.last_answer_id);
                 setQuestionPos(data['question_position']);
                 setQuestionType(data['question_type']);
                 setQuestionCategory(data['question_category'])
@@ -131,13 +130,13 @@ const Question: React.FC<QuestionaireIntroProps> = ({ questionaireId, responseId
 
                         </h1>
 
-                        {question_type === 'multiple_select' ? (<MultipleSelectProps options={question_options} sendOptions={(selected_options) => sendOptionAnswer(undefined, undefined, undefined, undefined, undefined, undefined, selected_options)} />) : null}
-                        {question_type === 'multiple_choice' ? (<OptionQuestion options={question_options} sendOption={sendOptionAnswer} deleteAnswer={deleteAnswer} />) : null}
-                        {question_type === 'open_ended' ? (<OpenEndedQuestion sendOption={(text) => sendOptionAnswer(undefined, text)} />) : null}
-                        {question_type === 'email' ? (<EmailQuestion className='flex-col' sendEmail={(email) => sendOptionAnswer(undefined, undefined, email)} />) : null}
-                        {question_type === 'file' ? (<FileQuestion sendFile={(file) => sendOptionAnswer(undefined, undefined, undefined, file)} />) : null}
-                        {question_type === 'phone' ? (<PhoneQuestion sendPhone={(phone) => sendOptionAnswer(undefined, undefined, undefined, undefined, phone)} />) : null}
-                        {question_type === 'text' ? (<SmallTextQuestion sendText={(small_text) => sendOptionAnswer(undefined, undefined, undefined, undefined, undefined, small_text)} />) : null}
+                        {question_type === 'multiple_select' ? (<MultipleSelectProps options={question_options} deleteAnswer={deleteAnswer} lastAnswerId={lastAnswerId} sendOptions={(selected_options) => sendOptionAnswer(undefined, undefined, undefined, undefined, undefined, undefined, selected_options)} />) : null}
+                        {question_type === 'multiple_choice' ? (<OptionQuestion options={question_options} deleteAnswer={deleteAnswer} lastAnswerId={lastAnswerId} sendOption={sendOptionAnswer} />) : null}
+                        {question_type === 'open_ended' ? (<OpenEndedQuestion deleteAnswer={deleteAnswer} lastAnswerId={lastAnswerId} sendOption={(text) => sendOptionAnswer(undefined, text)} />) : null}
+                        {question_type === 'email' ? (<EmailQuestion deleteAnswer={deleteAnswer} lastAnswerId={lastAnswerId} className='flex-col' sendEmail={(email) => sendOptionAnswer(undefined, undefined, email)} />) : null}
+                        {question_type === 'file' ? (<FileQuestion deleteAnswer={deleteAnswer} lastAnswerId={lastAnswerId} sendFile={(file) => sendOptionAnswer(undefined, undefined, undefined, file)} />) : null}
+                        {question_type === 'phone' ? (<PhoneQuestion deleteAnswer={deleteAnswer} lastAnswerId={lastAnswerId} sendPhone={(phone) => sendOptionAnswer(undefined, undefined, undefined, undefined, phone)} />) : null}
+                        {question_type === 'text' ? (<SmallTextQuestion deleteAnswer={deleteAnswer} lastAnswerId={lastAnswerId} sendText={(small_text) => sendOptionAnswer(undefined, undefined, undefined, undefined, undefined, small_text)} />) : null}
                     </div>
                 </div>
                 {(questionDescription &&

@@ -33,11 +33,17 @@ class QuestionDetailView(APIView):
             response = Response.objects.get(questionnaire_id=questionnaire_id, cookie_id=responseId)
         except Response.DoesNotExist:
             response = Response.objects.create(questionnaire_id=questionnaire_id, old_cookie_id=responseId ,cookie_id=responseId)
-        
+        answers = Answer.objects.filter(response=response)
+
+        response_data = {}
+
+        if answers:
+            response_data["last_answer_id"] = answers.last().id
+
         unanswered_question = Question.objects.filter(questionnaire_id=questionnaire_id, active=True).exclude(answer__response=response).order_by('position').first()
 
         if unanswered_question:
-            response_data = {
+            response_data.update({
                 "question_id": unanswered_question.id,
                 "question_text": unanswered_question.text,
                 "question_type": unanswered_question.type,
@@ -46,7 +52,7 @@ class QuestionDetailView(APIView):
                 "question_category": unanswered_question.question_category.name if unanswered_question.question_category else None,
                 "description": unanswered_question.description if unanswered_question.description else "",
                 "options": [],
-            }
+            })
 
             if unanswered_question.type == 'multiple_choice' or unanswered_question.type == 'multiple_select':
                 options = unanswered_question.option_set.all()
