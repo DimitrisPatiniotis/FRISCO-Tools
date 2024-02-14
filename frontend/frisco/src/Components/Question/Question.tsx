@@ -38,6 +38,7 @@ const Question: React.FC<QuestionaireIntroProps> = ({ questionaireId, responseId
     const [question_options, setQuestionOptions] = useState<Option[]>([]);
     const [question_id, setQuestionId] = useState<number>(0);
     const [total_questions, setTotalQuestions] = useState<number>(0);
+    const [answerIds, setAnswerIds] = useState<number[] | []>([]);
 
     const sendOptionAnswer = async (option_id?: number, text?: string, email?: string, file?: File, phone?: string, small_text?: string, selected_options?: number[]) => {
         try {
@@ -60,6 +61,7 @@ const Question: React.FC<QuestionaireIntroProps> = ({ questionaireId, responseId
                 formData.append('selected_options', selectedOptionsStrings.join(','));
             }
             const response = await axios.post(`${ACTIVE_URL}/api/answer/${responseId}/${question_id}/`, formData);
+            setAnswerIds(prevAnswerIds => [...prevAnswerIds, response.data.answer.id]);
             setInTransition(true);
             setTimeout(() => {
                 setQuestionChangeSwitch(questionChangeSwitch + 1);
@@ -71,6 +73,22 @@ const Question: React.FC<QuestionaireIntroProps> = ({ questionaireId, responseId
             console.error('Error sending answer:', error);
         }
     };
+
+    const deleteAnswer = async () => {
+    try {
+        if (answerIds.length > 0) {
+              const response = await axios.delete(`${ACTIVE_URL}/api/answer/${answerIds[answerIds.length - 1]}/`);
+              setAnswerIds(prevAnswerIds => prevAnswerIds.slice(0, -1));
+              setInTransition(true);
+              setTimeout(() => {
+                setQuestionChangeSwitch(questionChangeSwitch - 1);
+                setInTransition(false);
+            }, 290);
+        }
+    } catch (error) {
+        console.error('Error deleting answer:', error);
+    }
+};
 
     useEffect(() => {
         fetch(`${ACTIVE_URL}/api/questionnaire/${questionaireId}/${responseId}/questions/`)
@@ -114,7 +132,7 @@ const Question: React.FC<QuestionaireIntroProps> = ({ questionaireId, responseId
                         </h1>
 
                         {question_type === 'multiple_select' ? (<MultipleSelectProps options={question_options} sendOptions={(selected_options) => sendOptionAnswer(undefined, undefined, undefined, undefined, undefined, undefined, selected_options)} />) : null}
-                        {question_type === 'multiple_choice' ? (<OptionQuestion options={question_options} sendOption={sendOptionAnswer} />) : null}
+                        {question_type === 'multiple_choice' ? (<OptionQuestion options={question_options} sendOption={sendOptionAnswer} deleteAnswer={deleteAnswer} />) : null}
                         {question_type === 'open_ended' ? (<OpenEndedQuestion sendOption={(text) => sendOptionAnswer(undefined, text)} />) : null}
                         {question_type === 'email' ? (<EmailQuestion className='flex-col' sendEmail={(email) => sendOptionAnswer(undefined, undefined, email)} />) : null}
                         {question_type === 'file' ? (<FileQuestion sendFile={(file) => sendOptionAnswer(undefined, undefined, undefined, file)} />) : null}

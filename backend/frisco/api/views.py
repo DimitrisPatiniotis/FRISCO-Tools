@@ -116,9 +116,15 @@ class AnswerCreateView(APIView):
             if small_text is not None:
                 answer.small_text = small_text
                 answer.save_with_update()
-                
-        return JsonResponse({"message": "Answer created/updated successfully"}, status=status.HTTP_201_CREATED)
-        
+        serialized_answer = AnswerSerializer(answer)
+        return JsonResponse({"message": "Answer created/updated successfully", "answer": serialized_answer.data}, status=status.HTTP_201_CREATED)
+
+class AnswerDeleteView(APIView):
+    def delete(self, request, answer_id):
+        answer = get_object_or_404(Answer, pk=answer_id)
+        answer.delete()
+        return JsonResponse({"message": "Answer deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
+
 class AllResponsesView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
@@ -431,7 +437,8 @@ class SetQuestionnaireEmail(APIView):
             return RestResponse(status=status.HTTP_201_CREATED)
         except:
             return RestResponse(status=status.HTTP_400_BAD_REQUEST)
-        
+
+
 class ResponderDownloadResponse(APIView):
     def get(self, request, cookie_id):
         try:

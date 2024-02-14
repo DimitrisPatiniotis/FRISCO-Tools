@@ -10,9 +10,10 @@ interface Option {
 interface OptionQuestionProps {
     options: Option[];
     sendOption: (selectedOptionId: number) => void;
+    deleteAnswer: () => void;
 }
 
-const OptionQuestion: React.FC<OptionQuestionProps> = ({ options, sendOption }) => {
+const OptionQuestion: React.FC<OptionQuestionProps> = ({ options, sendOption, deleteAnswer }) => {
     const [selectedOptionId, setSelectedOptionId] = useState<number | null>(null);
 
     const handleRadioChange = (optionId: number) => {
@@ -51,9 +52,14 @@ const OptionQuestion: React.FC<OptionQuestionProps> = ({ options, sendOption }) 
                     </li>
                 ))}
             </ul>
+        <div className="flex gap-8">
             <button onClick={handleSubmit} className="px-4 py-2 bg-frisco_purple text-white font-semibold rounded transition-colors shadow-md hover:bg-frisco_purple_light focus:outline-none">
                 Next
             </button>
+            <button onClick={deleteAnswer} className="px-4 py-2 bg-frisco_purple text-white font-semibold rounded transition-colors shadow-md hover:bg-frisco_purple_light focus:outline-none">
+                Back
+            </button>
+        </div>
         </div>
     );
 };
