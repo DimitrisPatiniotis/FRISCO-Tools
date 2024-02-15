@@ -35,7 +35,7 @@ const QuestionaireWrapper = () => {
   // On first render, check if the response_id cookie exists - Used for saving responses even if the user closes the browser
   useEffect(() => {
     // Check if the response_id cookie exists
-    if (cookies.response_id && continueState=='start') {
+    if (cookies.response_id && continueState === 'start') {
       // If the cookie exists, set response_id to its value
       setResponseId(cookies.response_id);
       setContinueState('continue');
