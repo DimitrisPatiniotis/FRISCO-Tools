@@ -25,21 +25,25 @@ const FlowController: React.FC<FlowControllerProps> = ({ question, answers, setA
         )
     }
     return (
-        <div className='flow-choice-panel bg-neutral-50 border-frisco_purple border-2 rounded-md shadow-lg p-4'>
-            <HTMLRenderer htmlContent={question || ''} className='text-lg text-neutral-600'/>
-            <div className='flex flex-col gap-4 mt-4'>
-                {answers &&
-                    answers.map((answer) => (
-                        <div
-                            key={answer.answer_text}
-                            className='text-white w-full bg-frisco_orange py-2 px-2 rounded-md cursor-pointer'
-                            onClick={() => setAnswer(answer)}
-                        >
-                            {answer.answer_text}
-                        </div>
-                    ))}
+        <>
+            <div className='flow-choice-panel bg-neutral-50 border-frisco_purple border-2 rounded-md shadow-lg p-4'>
+                <HTMLRenderer htmlContent={question || ''} className='text-lg text-neutral-600' />
+                <div className='flex flex-col gap-4 mt-4'>
+                    {answers &&
+                        answers.map((answer) => (
+                            <div
+                                key={answer.answer_text}
+                                className='text-white w-full bg-frisco_orange py-2 px-2 rounded-md cursor-pointer'
+                                onClick={() => setAnswer(answer)}
+                            >
+                                {answer.answer_text}
+                            </div>
+                        ))}
+                </div>
+
             </div>
-        </div>
+
+        </>
     );
 };
 

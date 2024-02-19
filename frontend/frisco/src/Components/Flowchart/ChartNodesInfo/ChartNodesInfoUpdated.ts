@@ -35,8 +35,6 @@ interface NodeInfo {
             font_size?: string,
             border_radius?: string,
             node_padding?: string
-
-
         };
         position: { x: number; y: number };
     };
