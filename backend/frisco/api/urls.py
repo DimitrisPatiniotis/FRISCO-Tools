@@ -9,6 +9,7 @@ urlpatterns = [
     
     # POST
     path('answer/<str:cookie_id>/<int:question_id>/', AnswerCreateView.as_view(), name='answer_create'),
+    path('answer/<int:answer_id>/', AnswerDeleteView.as_view(), name='answer_delete'),
     path('question/deactivate/<int:question_id>/', DeactivateQuestionView.as_view(), name='deactivate_question'),
     path('questions/create/', CreateQuestionView.as_view(), name='create_question'),
     path('question_category/deactivate/<int:category_id>/', deactivateQuestionCategory.as_view(), name='deactivate_question_category'),

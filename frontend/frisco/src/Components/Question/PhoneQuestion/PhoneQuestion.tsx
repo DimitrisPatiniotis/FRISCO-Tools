@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 
 interface PhoneQuestionProps {
   sendPhone: (phone: string) => void;
+  deleteAnswer: () => void;
+  lastAnswerId: number | undefined;
 }
 
-const PhoneQuestion: React.FC<PhoneQuestionProps> = ({ sendPhone }) => {
+const PhoneQuestion: React.FC<PhoneQuestionProps> = ({ sendPhone, deleteAnswer, lastAnswerId }) => {
   const [phone, setPhone] = useState('');
   const [isInvalidPhone, setIsInvalidPhone] = useState(false);
 
@@ -37,13 +39,19 @@ const PhoneQuestion: React.FC<PhoneQuestionProps> = ({ sendPhone }) => {
         className={`w-full p-2 mb-3 border-2 rounded text-black no-outline ${isInvalidPhone ? 'border-red-500' : 'border-white'
           } focus:outline-none active:outline-none`}
       />
-
-      <button
-        onClick={handleSubmit}
-        className="px-4 py-2 bg-frisco_purple text-white font-semibold rounded transition-colors shadow-md hover:bg-blue-700 focus:outline-none"
-      >
-        Next
-      </button>
+        <div className="flex gap-8">
+          <button
+            onClick={handleSubmit}
+            className="px-4 py-2 bg-frisco_purple text-white font-semibold rounded transition-colors shadow-md hover:bg-blue-700 focus:outline-none"
+          >
+            Next
+          </button>
+        {lastAnswerId && (
+            <button onClick={deleteAnswer} className="px-4 py-2 bg-frisco_purple text-white font-semibold rounded transition-colors shadow-md hover:bg-frisco_purple_light focus:outline-none">
+                Back
+            </button>
+        )}
+        </div>
     </div>
   );
 };

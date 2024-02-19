@@ -33,11 +33,17 @@ class QuestionDetailView(APIView):
             response = Response.objects.get(questionnaire_id=questionnaire_id, cookie_id=responseId)
         except Response.DoesNotExist:
             response = Response.objects.create(questionnaire_id=questionnaire_id, old_cookie_id=responseId ,cookie_id=responseId)
-        
+        answers = Answer.objects.filter(response=response)
+
+        response_data = {}
+
+        if answers:
+            response_data["last_answer_id"] = answers.last().id
+
         unanswered_question = Question.objects.filter(questionnaire_id=questionnaire_id, active=True).exclude(answer__response=response).order_by('position').first()
 
         if unanswered_question:
-            response_data = {
+            response_data.update({
                 "question_id": unanswered_question.id,
                 "question_text": unanswered_question.text,
                 "question_type": unanswered_question.type,
@@ -46,7 +52,7 @@ class QuestionDetailView(APIView):
                 "question_category": unanswered_question.question_category.name if unanswered_question.question_category else None,
                 "description": unanswered_question.description if unanswered_question.description else "",
                 "options": [],
-            }
+            })
 
             if unanswered_question.type == 'multiple_choice' or unanswered_question.type == 'multiple_select':
                 options = unanswered_question.option_set.all()
@@ -116,9 +122,15 @@ class AnswerCreateView(APIView):
             if small_text is not None:
                 answer.small_text = small_text
                 answer.save_with_update()
-                
-        return JsonResponse({"message": "Answer created/updated successfully"}, status=status.HTTP_201_CREATED)
-        
+        serialized_answer = AnswerSerializer(answer)
+        return JsonResponse({"message": "Answer created/updated successfully", "answer": serialized_answer.data}, status=status.HTTP_201_CREATED)
+
+class AnswerDeleteView(APIView):
+    def delete(self, request, answer_id):
+        answer = get_object_or_404(Answer, pk=answer_id)
+        answer.delete()
+        return JsonResponse({"message": "Answer deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
+
 class AllResponsesView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
@@ -431,7 +443,8 @@ class SetQuestionnaireEmail(APIView):
             return RestResponse(status=status.HTTP_201_CREATED)
         except:
             return RestResponse(status=status.HTTP_400_BAD_REQUEST)
-        
+
+
 class ResponderDownloadResponse(APIView):
     def get(self, request, cookie_id):
         try:

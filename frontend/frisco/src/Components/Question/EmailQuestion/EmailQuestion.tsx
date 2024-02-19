@@ -6,9 +6,11 @@ interface EmailQuestionProps {
   className?: string;
   submitButtonText?: string;
   placeholder?: string;
+  deleteAnswer?: () => void;
+  lastAnswerId?: number | undefined;
 }
 
-const EmailQuestion: React.FC<EmailQuestionProps> = ({ sendEmail, placeholder, className,submitButtonText }) => {
+const EmailQuestion: React.FC<EmailQuestionProps> = ({ sendEmail, placeholder, className,submitButtonText, deleteAnswer, lastAnswerId }) => {
   const [email, setEmail] = useState('');
   const [isInvalidEmail, setIsInvalidEmail] = useState(false);
 
@@ -42,14 +44,20 @@ const EmailQuestion: React.FC<EmailQuestionProps> = ({ sendEmail, placeholder, c
           } focus:outline-none active:outline-none`}
       />
       <div>
-        <button
-          onClick={handleSubmit}
-          className="px-4 py-2 bg-frisco_purple text-white font-semibold rounded transition-colors shadow-md hover:bg-frisco_purple_light focus:outline-none"
-        >
-          {submitButtonText ? submitButtonText : 'Next'}
-        </button>
+        <div className="flex gap-8">
+          <button
+            onClick={handleSubmit}
+            className="px-4 py-2 bg-frisco_purple text-white font-semibold rounded transition-colors shadow-md hover:bg-frisco_purple_light focus:outline-none"
+          >
+            {submitButtonText ? submitButtonText : 'Next'}
+          </button>
+          {lastAnswerId && (
+              <button onClick={deleteAnswer} className="px-4 py-2 bg-frisco_purple text-white font-semibold rounded transition-colors shadow-md hover:bg-frisco_purple_light focus:outline-none">
+                  Back
+              </button>
+          )}
+        </div>
       </div>
-
     </div>
   );
 };

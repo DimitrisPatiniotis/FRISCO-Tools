@@ -11,9 +11,11 @@ interface Option {
 interface MultipleSelectProps {
     options: Option[];
     sendOptions: (selectedOptionsIds: number[]) => void;
+    deleteAnswer: () => void;
+    lastAnswerId: number | undefined;
 }
 
-const MultipleSelectQuestion: React.FC<MultipleSelectProps> = ({ options, sendOptions }) => {
+const MultipleSelectQuestion: React.FC<MultipleSelectProps> = ({ options, sendOptions, deleteAnswer, lastAnswerId }) => {
     const [selectedOptionsIds, setSelectedOptionsIds] = useState<number[]>([]);
     const isSubmitDisabled = selectedOptionsIds.length === 0;
 
@@ -58,13 +60,20 @@ const MultipleSelectQuestion: React.FC<MultipleSelectProps> = ({ options, sendOp
                     </li>
                 ))}
             </ul>
-            <button
-                onClick={handleSubmit}
-                className={`px-4 py-2  text-white font-semibold rounded transition-colors bg-frisco_purple shadow-md focus:outline-none ${isSubmitDisabled ? '' : 'hover:bg-frisco_purple_light'}`}
-                disabled={isSubmitDisabled}
-            >
-                Next
-            </button>
+            <div className="flex gap-8">
+                <button
+                    onClick={handleSubmit}
+                    className={`px-4 py-2  text-white font-semibold rounded transition-colors bg-frisco_purple shadow-md focus:outline-none ${isSubmitDisabled ? '' : 'hover:bg-frisco_purple_light'}`}
+                    disabled={isSubmitDisabled}
+                >
+                    Next
+                </button>
+                {lastAnswerId && (
+                <button onClick={deleteAnswer} className="px-4 py-2 bg-frisco_purple text-white font-semibold rounded transition-colors shadow-md hover:bg-frisco_purple_light focus:outline-none">
+                    Back
+                </button>
+                )}
+            </div>
         </div>
     );
 };
