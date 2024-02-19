@@ -157,15 +157,19 @@ const BasicFlow = () => {
                         is_last_node={stateToQuestions[flowControllerState[flowControllerState.length - 1]]?.is_last_node || false}
                     />
                 </Panel>
-                <Panel position={'bottom-right'}>
-                    <div className='w-[200px] bg-neutral-400 gap-1 text-neutral-50 h-10 flex justify-center cursor-pointer items-center absolute right-0 bottom-[150px] mb-2 rounded-md' onClick={removeLastAdded}>
-                    <IonIcon icon="arrow-undo" />
-                        <div>
-                            Back
+                {
+                    nodes.length > 1 ? (
+                        <Panel position={'bottom-right'}>
+                        <div className='w-[200px] bg-neutral-400 gap-1 text-neutral-50 h-10 flex justify-center cursor-pointer items-center absolute right-0 bottom-[150px] mb-2 rounded-md' onClick={removeLastAdded}>
+                        <IonIcon icon="arrow-undo" />
+                            <div>
+                                Back
+                            </div>
                         </div>
+                    </Panel>
+                    ) : null
+                }
 
-                    </div>
-                </Panel>
                 <Background />
                 <Controls />
                 <MiniMap zoomable pannable />

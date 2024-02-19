@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './OpenEndedQuestion.css'
+import QuestionFooter from '../QuestionFooter/QuestionFooter';
 
 interface OptionQuestionProps {
   sendOption: (text: string) => void;
@@ -30,19 +31,7 @@ const OpenEndedQuestion: React.FC<OptionQuestionProps> = ({ sendOption, deleteAn
         className="w-full p-2 mb-3 border rounded text-black no-outline border-white focus:outline-none active:outline-none"
         rows={4}
       />
-        <div className="flex gap-8">
-          <button
-            onClick={handleSubmit}
-            className="px-4 py-2 bg-frisco_purple text-white font-semibold rounded focus:outline-none  transition-colors shadow-md hover:bg-blue-700 outline-none"
-          >
-            Next
-          </button>
-        {lastAnswerId && (
-        <button onClick={deleteAnswer} className="px-4 py-2 bg-frisco_purple text-white font-semibold rounded transition-colors shadow-md hover:bg-frisco_purple_light focus:outline-none">
-            Back
-        </button>
-        )}
-        </div>
+      <QuestionFooter onClickNext={handleSubmit} onClickBack={deleteAnswer} isFirstQuestion={lastAnswerId === undefined} />
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { IonIcon } from '@ionic/react';
+import QuestionFooter from '../QuestionFooter/QuestionFooter';
 
 interface Option {
     id: number;
@@ -53,16 +54,7 @@ const OptionQuestion: React.FC<OptionQuestionProps> = ({ options, sendOption, de
                     </li>
                 ))}
             </ul>
-        <div className="flex gap-8">
-            <button onClick={handleSubmit} className="px-4 py-2 bg-frisco_purple text-white font-semibold rounded transition-colors shadow-md hover:bg-frisco_purple_light focus:outline-none">
-                Next
-            </button>
-            {lastAnswerId && (
-                <button onClick={deleteAnswer} className="px-4 py-2 bg-frisco_purple text-white font-semibold rounded transition-colors shadow-md hover:bg-frisco_purple_light focus:outline-none">
-                    Back
-                </button>
-            )}
-        </div>
+            <QuestionFooter onClickNext={handleSubmit} onClickBack={deleteAnswer} isFirstQuestion={lastAnswerId === undefined} />
         </div>
     );
 };

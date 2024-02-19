@@ -128,7 +128,16 @@ class AnswerCreateView(APIView):
 class AnswerDeleteView(APIView):
     def delete(self, request, answer_id):
         answer = get_object_or_404(Answer, pk=answer_id)
+        was_skipped = answer.skipped
         answer.delete()
+        if was_skipped:
+            while True:
+                last_answer = Answer.objects.filter(response=answer.response).last()
+                if last_answer and last_answer.skipped:
+                    last_answer.delete()
+                else:
+                    break
+
         return JsonResponse({"message": "Answer deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
 
 class AllResponsesView(APIView):
