@@ -3,12 +3,12 @@ import { ACTIVE_URL } from '../../constants';
 import EmailQuestion from '../Question/EmailQuestion/EmailQuestion';
 import NumberCounter from '../../utils/NumberCounter/NumberCounter';
 
-interface QuestionaireOutroProps {
+interface QuestionnaireOutroProps {
   questionnaireId: number;
   responseId: string;
 }
 
-const QuestionnaireOutro: React.FC<QuestionaireOutroProps> = ({ questionnaireId, responseId }) => {
+const QuestionnaireOutro: React.FC<QuestionnaireOutroProps> = ({ questionnaireId, responseId }) => {
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [emailSubmitted, setEmailSubmitted] = useState<boolean>(false);
