@@ -4,18 +4,18 @@ import EmailQuestion from '../Question/EmailQuestion/EmailQuestion';
 import NumberCounter from '../../utils/NumberCounter/NumberCounter';
 
 interface QuestionaireOutroProps {
-  questionaireId: number;
+  questionnaireId: number;
   responseId: string;
 }
 
-const QuestionaireOutro: React.FC<QuestionaireOutroProps> = ({ questionaireId, responseId }) => {
+const QuestionnaireOutro: React.FC<QuestionaireOutroProps> = ({ questionnaireId, responseId }) => {
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [emailSubmitted, setEmailSubmitted] = useState<boolean>(false);
   const [complianceScore, setComplianceScore] = useState<number>(0);
 
   useEffect(() => {
-    fetch(`${ACTIVE_URL}/api/questionnaire/${questionaireId}/`)
+    fetch(`${ACTIVE_URL}/api/questionnaire/${questionnaireId}/`)
       .then((response) => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -29,7 +29,7 @@ const QuestionaireOutro: React.FC<QuestionaireOutroProps> = ({ questionaireId, r
       .catch((error) => {
         console.error('Error:', error);
       });
-  }, [questionaireId]);
+  }, [questionnaireId]);
 
   useEffect(() => {
     fetch(`${ACTIVE_URL}/api/response/${responseId}/get_score/`)
@@ -45,7 +45,7 @@ const QuestionaireOutro: React.FC<QuestionaireOutroProps> = ({ questionaireId, r
       .catch((error) => {
         console.error('Error:', error);
       });
-  }, [questionaireId]);
+  }, [questionnaireId]);
 
   const sendEmail = async (email: string) => {
     console.log(responseId)
@@ -172,4 +172,4 @@ const QuestionaireOutro: React.FC<QuestionaireOutroProps> = ({ questionaireId, r
   );
 };
 
-export default QuestionaireOutro;
+export default QuestionnaireOutro;
