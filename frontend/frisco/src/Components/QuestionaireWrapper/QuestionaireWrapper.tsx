@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useCookies } from 'react-cookie';
-import QuestionaireIntro from '../QuestionaireIntro/QuestionaireIntro';
+import QuestionnaireIntro from '../QuestionaireIntro/QuestionnaireIntro';
 import Question from '../Question/Question';
-import QuestionaireOutro from '../QuestionaireOutro/QuestionaireOutro';
+import QuestionnaireOutro from '../QuestionaireOutro/QuestionaireOutro';
 import './QuestionaireWrapper.css';
 import { useAuthContext } from '../../utils/useAuthContext';
 
@@ -11,9 +11,9 @@ import Logo from '../../assets/images/logos/Final-logo-Frisco-scaled.png';
 
 const QuestionaireWrapper = () => {
   const { user } = useAuthContext(); 
-  const [questionaire, setQuestionaire] = useState(1);
+  const [questionnaire, setQuestionnaire] = useState(1);
   const [oldCookie, setOldCookie] = useState('');
-  const [questionaireState, setQuestionaireState] = useState('intro');
+  const [questionnaireState, setQuestionnaireState] = useState('intro');
   const [continueState, setContinueState] = useState('start');
   const [response_id, setResponseId] = useState('');
   const [cookies, setCookie] = useCookies(['response_id']);
@@ -46,12 +46,12 @@ const QuestionaireWrapper = () => {
 
   const changeQuestionState = (newMode: string, continueFlag: boolean = false ) => {
     if (continueFlag) {
-      setQuestionaireState(newMode);
+      setQuestionnaireState(newMode);
     } else {
       // To be added - a read cookie should be ideally different from the one that is set
       setOldCookie(cookies.response_id);
       createNewCookie();
-      setQuestionaireState(newMode);
+      setQuestionnaireState(newMode);
     }
   };
 
@@ -64,9 +64,9 @@ const QuestionaireWrapper = () => {
       </div>
       <div className=''></div>
       <div className='questionaire-inner'>
-        {questionaireState === 'intro' ? ( <QuestionaireIntro questionaireId={questionaire} continueS={continueState} onButtonClick={changeQuestionState} />) : null} 
-        {questionaireState === 'question' ? ( <Question continueState={continueState} questionaireId={questionaire} responseId={response_id} onEnd={(changeQuestionState)} />) : null}
-        {questionaireState === 'end' ? ( <QuestionaireOutro questionaireId={questionaire}  responseId={oldCookie} />) : null}
+        {questionnaireState === 'intro' ? ( <QuestionnaireIntro questionnaireId={questionnaire} continueS={continueState} onButtonClick={changeQuestionState} />) : null}
+        {questionnaireState === 'question' ? ( <Question continueState={continueState} questionaireId={questionnaire} responseId={response_id} onEnd={(changeQuestionState)} />) : null}
+        {questionnaireState === 'end' ? ( <QuestionnaireOutro questionaireId={questionnaire} responseId={oldCookie} />) : null}
       </div>
       {user ? (<div className='cursor-pointer z-10 absolute bottom-10 right-12 py-10 px-12' onClick={() => window.location.href = '/admin'}>Enter Admin</div>) : null}
     </div>
