@@ -5,7 +5,7 @@ interface IntroProps {
 }
 
 const Intro: React.FC<IntroProps> = ({ onButtonClick }) => {
-    document.title = 'Questionnaire';
+    document.title = '[FRISCO] Questionnaire';
     return (
         <div className="bg-neutral-50 p-5 flex flex-col gap-10">
             <div className='absolute m-[15px] top-0 left-0'>

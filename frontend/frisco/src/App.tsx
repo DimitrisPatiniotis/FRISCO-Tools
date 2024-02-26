@@ -11,7 +11,6 @@ import LoginPage from './Pages/Login/LoginPage';
 import FlowchartPage from './Pages/FlowchartPage/FlowchartPage';
 
 function App() {
-  document.title = 'FRISCO Demo';
   return (
     <BrowserRouter>
       <AuthProvider>
