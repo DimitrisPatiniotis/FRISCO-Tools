@@ -5,19 +5,18 @@ import { AuthProvider } from './utils/AuthContext';
 
 import PrivateRoute from './utils/PrivateRoute';
 
-import Questionaire from './Pages/Questionnaire/Questionaire';
+import Questionnaire from './Pages/Questionnaire/Questionnaire';
 import Admin from './Pages/Admin/Admin';
 import LoginPage from './Pages/Login/LoginPage';
 import FlowchartPage from './Pages/FlowchartPage/FlowchartPage';
 
 function App() {
-  document.title = 'FRISCO Demo';
   return (
     <BrowserRouter>
       <AuthProvider>
         <Routes>
           <Route path="/flowchart" element={<FlowchartPage/>} />
-          <Route path="/" element={<Questionaire />} />
+          <Route path="/" element={<Questionnaire />} />
           <Route path="/admin"
             element={
               <PrivateRoute authenticationPath="/login">

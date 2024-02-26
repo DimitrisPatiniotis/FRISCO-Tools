@@ -4,16 +4,16 @@ import { ACTIVE_URL } from '../../constants';
 
 interface QuestionaireIntroProps {
   continueS: string;
-  questionaireId: number;
+  questionnaireId: number;
   onButtonClick: (newMode: string, continueFlag: boolean) => void;
 }
 
-const QuestionaireIntro: React.FC<QuestionaireIntroProps> = ({ continueS, questionaireId, onButtonClick }) => {
+const QuestionnaireIntro: React.FC<QuestionaireIntroProps> = ({ continueS, questionnaireId, onButtonClick }) => {
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
 
   useEffect(() => {
-    fetch(`${ACTIVE_URL}/api/questionnaire/${questionaireId}/`)
+    fetch(`${ACTIVE_URL}/api/questionnaire/${questionnaireId}/`)
       .then((response) => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -27,7 +27,7 @@ const QuestionaireIntro: React.FC<QuestionaireIntroProps> = ({ continueS, questi
       .catch((error) => {
         console.error('Error:', error);
       });
-  }, [questionaireId]);
+  }, [questionnaireId]);
 
   return (
     <div className="max-w-md flex flex-col gap-6">
@@ -45,4 +45,4 @@ const QuestionaireIntro: React.FC<QuestionaireIntroProps> = ({ continueS, questi
   );
 }
 
-export default QuestionaireIntro;
+export default QuestionnaireIntro;
