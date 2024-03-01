@@ -92,15 +92,19 @@ class AnswerCreateView(APIView):
                         position__gte=question.position,
                         position__lt=answered_option_goto
                     )
-                    for skipped_question in skipped_questions:
-                        skipped_answer, created = Answer.objects.get_or_create(
-                            response=response,
-                            question=skipped_question,
-                            defaults={'skipped': True}
-                        )
-                        if not created:
-                            skipped_answer.skipped = True
-                            skipped_answer.save_with_update()
+                    if skipped_questions.exists():
+                        skipped_answers = []
+                        for skipped_question in skipped_questions:
+                            skipped_answer, created = Answer.objects.get_or_create(
+                                response=response,
+                                question=skipped_question,
+                                defaults={'skipped': True}
+                            )
+                            if not created:
+                                skipped_answer.skipped = True
+                                skipped_answer.save_with_update()
+                            skipped_answers.append(skipped_answer)
+                        Answer.objects.bulk_update(skipped_answers, ['skipped'])
 
         elif question.type == 'multiple_select':
             selected_options = request.data.get('selected_options')
