@@ -106,7 +106,6 @@ class AnswerCreateView(APIView):
 
                         Answer.objects.bulk_create(skipped_answers)
 
-                        # Update existing skipped answers
                         for existing_skipped_answer in existing_skipped_answers:
                             existing_skipped_answer.skipped = True
                         Answer.objects.bulk_update(existing_skipped_answers, ['skipped'])
