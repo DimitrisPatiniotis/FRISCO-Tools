@@ -86,14 +86,19 @@ class AnswerCreateView(APIView):
                 answer.save_with_update()
 
                 if answered_option_goto != -1:
-
-                    for i in range(question.position, answered_option_goto):
-                        print(i)
-                        skipped_question = Question.objects.filter(questionnaire=response.questionnaire, active=True,
-                                                                   position=i).first()
-                        if skipped_question:
-                            skipped_answer, created = Answer.objects.get_or_create(response=response,
-                                                                                   question=skipped_question)
+                    skipped_questions = Question.objects.filter(
+                        questionnaire=response.questionnaire,
+                        active=True,
+                        position__gte=question.position,
+                        position__lt=answered_option_goto
+                    )
+                    for skipped_question in skipped_questions:
+                        skipped_answer, created = Answer.objects.get_or_create(
+                            response=response,
+                            question=skipped_question,
+                            defaults={'skipped': True}
+                        )
+                        if not created:
                             skipped_answer.skipped = True
                             skipped_answer.save_with_update()
 
