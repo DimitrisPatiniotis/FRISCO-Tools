@@ -125,7 +125,7 @@ const Question: React.FC<QuestionaireIntroProps> = ({ questionaireId, responseId
                         <h3 className='text-lg text-frisco_purple'>{questionCategory}</h3>
                         <h1 className='mb-2 text-1.5xl question-title text-neutral-800'>
                             <div className='w-full'>
-                                {continueState === 'start' ? questionChangeSwitch : questionPos}.  {description}
+                                {questionPos}.  {description}
                             </div>
 
                         </h1>
