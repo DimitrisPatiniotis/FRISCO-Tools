@@ -17,6 +17,7 @@ from .serializers import *
 from .utils import *
 import numpy as np
 
+
 class QuestionnaireByTitleView(APIView):
     def get(self, request, questionnaire_id):
         questionnaire = Questionnaire.objects.filter(id=questionnaire_id).first()
@@ -24,7 +25,8 @@ class QuestionnaireByTitleView(APIView):
             serializer = QuestionnaireSerializer(questionnaire)
             return JsonResponse(serializer.data)
         return RestResponse(status=status.HTTP_404_NOT_FOUND)
-    
+
+
 class QuestionDetailView(APIView):
     def get(self, request, questionnaire_id, responseId):
 
@@ -32,7 +34,8 @@ class QuestionDetailView(APIView):
         try:
             response = Response.objects.get(questionnaire_id=questionnaire_id, cookie_id=responseId)
         except Response.DoesNotExist:
-            response = Response.objects.create(questionnaire_id=questionnaire_id, old_cookie_id=responseId ,cookie_id=responseId)
+            response = Response.objects.create(questionnaire_id=questionnaire_id, old_cookie_id=responseId,
+                                               cookie_id=responseId)
         answers = Answer.objects.filter(response=response)
 
         response_data = {}
@@ -40,7 +43,8 @@ class QuestionDetailView(APIView):
         if answers:
             response_data["last_answer_id"] = answers.last().id
 
-        unanswered_question = Question.objects.filter(questionnaire_id=questionnaire_id, active=True).exclude(answer__response=response).order_by('position').first()
+        unanswered_question = Question.objects.filter(questionnaire_id=questionnaire_id, active=True).exclude(
+            answer__response=response).order_by('position').first()
 
         if unanswered_question:
             response_data.update({
@@ -62,6 +66,7 @@ class QuestionDetailView(APIView):
         else:
             return JsonResponse({"end": "true"}, status=status.HTTP_200_OK)
 
+
 class AnswerCreateView(APIView):
     def post(self, request, cookie_id, question_id):
         try:
@@ -81,14 +86,29 @@ class AnswerCreateView(APIView):
                 answer.save_with_update()
 
                 if answered_option_goto != -1:
+                    skipped_questions = Question.objects.filter(
+                        questionnaire=response.questionnaire,
+                        active=True,
+                        position__gte=question.position,
+                        position__lt=answered_option_goto
+                    )
+                    if skipped_questions.exists():
+                        skipped_answers = []
+                        existing_skipped_answers = Answer.objects.filter(response=response,
+                                                                         question__in=skipped_questions)
+                        existing_skipped_questions = set(
+                            existing_skipped_answer.question for existing_skipped_answer in existing_skipped_answers)
 
-                    for i in range(question.position, answered_option_goto):
-                        print(i)
-                        skipped_question = Question.objects.filter(questionnaire=response.questionnaire, active=True, position=i).first()
-                        if skipped_question:
-                            skipped_answer, created = Answer.objects.get_or_create(response=response, question=skipped_question)
-                            skipped_answer.skipped = True
-                            skipped_answer.save_with_update()
+                        for skipped_question in skipped_questions:
+                            if skipped_question not in existing_skipped_questions:
+                                skipped_answers.append(
+                                    Answer(response=response, question=skipped_question, skipped=True))
+
+                        Answer.objects.bulk_create(skipped_answers)
+
+                        for existing_skipped_answer in existing_skipped_answers:
+                            existing_skipped_answer.skipped = True
+                        Answer.objects.bulk_update(existing_skipped_answers, ['skipped'])
 
         elif question.type == 'multiple_select':
             selected_options = request.data.get('selected_options')
@@ -123,7 +143,9 @@ class AnswerCreateView(APIView):
                 answer.small_text = small_text
                 answer.save_with_update()
         serialized_answer = AnswerSerializer(answer)
-        return JsonResponse({"message": "Answer created/updated successfully", "answer": serialized_answer.data}, status=status.HTTP_201_CREATED)
+        return JsonResponse({"message": "Answer created/updated successfully", "answer": serialized_answer.data},
+                            status=status.HTTP_201_CREATED)
+
 
 class AnswerDeleteView(APIView):
     def delete(self, request, answer_id):
@@ -140,9 +162,11 @@ class AnswerDeleteView(APIView):
 
         return JsonResponse({"message": "Answer deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
 
+
 class AllResponsesView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
+
     def get(self, request, *args, **kwargs):
         from_date = kwargs.get('from_date')
         to_date = kwargs.get('to_date')
@@ -161,11 +185,12 @@ class AllResponsesView(APIView):
         # responses = [response for response in responses if not (response.get_answer_name == 'unknown' and response.get_user_email == 'unknown')]
         serializer = ResponseSerializer(responses, many=True)
         return RestResponse(serializer.data, status=status.HTTP_200_OK)
-    
+
 
 class QuestionListByQuestionnaireView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
+
     def get(self, request, questionnaire_id):
         try:
             questionnaire = Questionnaire.objects.all().first()
@@ -175,10 +200,12 @@ class QuestionListByQuestionnaireView(APIView):
         questions = Question.objects.filter(questionnaire=questionnaire, active=True).order_by('position')
         serializer = QuestionSerializer(questions, many=True)
         return RestResponse(serializer.data, status=status.HTTP_200_OK)
-    
+
+
 class DeactivateQuestionView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
+
     def post(self, request, question_id):
         question = get_object_or_404(Question, pk=question_id)
         question.active = False
@@ -186,9 +213,11 @@ class DeactivateQuestionView(APIView):
 
         return RestResponse({'message': 'Question deactivated successfully'}, status=status.HTTP_200_OK)
 
+
 class CreateQuestionView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
+
     def post(self, request, *args, **kwargs):
         try:
             quesitonnaire = Questionnaire.objects.all().first()
@@ -196,47 +225,62 @@ class CreateQuestionView(APIView):
                 qcat = None
             else:
                 qcat = QuestionCategory.objects.get(id=int(request.data.get('category')))
-            new_question = Question.objects.create(questionnaire=quesitonnaire,  question_category = qcat, text=request.data.get('text'), description=request.data.get('description'), weight = float(request.data.get('weight')), type=request.data.get('type'), position=request.data.get('position'))
+            new_question = Question.objects.create(questionnaire=quesitonnaire, question_category=qcat,
+                                                   text=request.data.get('text'),
+                                                   description=request.data.get('description'),
+                                                   weight=float(request.data.get('weight')),
+                                                   type=request.data.get('type'), position=request.data.get('position'))
             new_question.save()
-            if request.data['options'] and (request.data.get('type') == 'multiple_choice' or request.data.get('type') == 'multiple_select'):
+            if request.data['options'] and (
+                    request.data.get('type') == 'multiple_choice' or request.data.get('type') == 'multiple_select'):
                 for option in request.data['options']:
-                    op = Option.objects.create(question=new_question, text=option['title'], goto=int(option['goto']), weight=float(option['weight']))
+                    op = Option.objects.create(question=new_question, text=option['title'], goto=int(option['goto']),
+                                               weight=float(option['weight']))
                     op.save()
             return RestResponse(status=status.HTTP_201_CREATED)
         except:
             return RestResponse(status=status.HTTP_400_BAD_REQUEST)
 
+
 class getAllQuestionCategories(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
+
     def get(self, request):
         categories = QuestionCategory.objects.filter(active=True)
         serializer = QuestionCategorySerializer(categories, many=True)
         return RestResponse(serializer.data, status=status.HTTP_200_OK)
-    
+
+
 class deactivateQuestionCategory(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
+
     def post(self, request, category_id):
         category = get_object_or_404(QuestionCategory, pk=category_id)
         category.active = False
         category.save()
         return RestResponse({'message': 'Question category deactivated successfully'}, status=status.HTTP_200_OK)
 
+
 class CreateQuestionCategory(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
+
     def post(self, request, *args, **kwargs):
         try:
-            new_category = QuestionCategory.objects.create(name=request.data.get('title'), description=request.data.get('description'))
+            new_category = QuestionCategory.objects.create(name=request.data.get('title'),
+                                                           description=request.data.get('description'))
             new_category.save()
             return RestResponse(status=status.HTTP_201_CREATED)
         except:
             return RestResponse(status=status.HTTP_400_BAD_REQUEST)
 
+
 class UpdateQuestion(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
+
     def post(self, request, *args, **kwargs):
         # try:
 
@@ -248,12 +292,14 @@ class UpdateQuestion(APIView):
         question.weight = float(request.data.get('weight'))
         question.description = request.data.get('description')
 
-        if question.type != request.data.get('type') or question.type == 'multiple_choice' or question.type == 'multiple_select':
+        if question.type != request.data.get(
+                'type') or question.type == 'multiple_choice' or question.type == 'multiple_select':
             question.type = request.data.get('type')
             question.option_set.all().delete()
             if request.data['options']:
                 for option in request.data['options']:
-                    op = Option.objects.create(question=question, text=option['title'], goto=int(option['goto']), weight=float(option['weight']))
+                    op = Option.objects.create(question=question, text=option['title'], goto=int(option['goto']),
+                                               weight=float(option['weight']))
                     op.save()
         question.save()
 
@@ -261,17 +307,21 @@ class UpdateQuestion(APIView):
         # except:
         #     return RestResponse(status=status.HTTP_400_BAD_REQUEST)
 
+
 class GetQuestionnaireInfo(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
+
     def get(self, request, *args, **kwargs):
         questionnaire = Questionnaire.objects.all().first()
         serializer = QuestionnaireSerializer(questionnaire)
         return RestResponse(serializer.data, status=status.HTTP_200_OK)
 
+
 class UpdateQuestionnaireTitle(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
+
     def post(self, request, *args, **kwargs):
         try:
             questionnaire = Questionnaire.objects.all().first()
@@ -281,9 +331,11 @@ class UpdateQuestionnaireTitle(APIView):
         except:
             return RestResponse(status=status.HTTP_400_BAD_REQUEST)
 
+
 class UpdateQuestionnaireOutroTitle(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
+
     def post(self, request, *args, **kwargs):
         try:
             questionnaire = Questionnaire.objects.all().first()
@@ -292,10 +344,12 @@ class UpdateQuestionnaireOutroTitle(APIView):
             return RestResponse(status=status.HTTP_201_CREATED)
         except:
             return RestResponse(status=status.HTTP_400_BAD_REQUEST)
-    
+
+
 class UpdateQuestionnaireDesc(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
+
     def post(self, request, *args, **kwargs):
         try:
             questionnaire = Questionnaire.objects.all().first()
@@ -304,10 +358,12 @@ class UpdateQuestionnaireDesc(APIView):
             return RestResponse(status=status.HTTP_201_CREATED)
         except:
             return RestResponse(status=status.HTTP_400_BAD_REQUEST)
-        
+
+
 class UpdateQuestionnaireOutroDesc(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
+
     def post(self, request, *args, **kwargs):
         try:
             questionnaire = Questionnaire.objects.all().first()
@@ -316,13 +372,15 @@ class UpdateQuestionnaireOutroDesc(APIView):
             return RestResponse(status=status.HTTP_201_CREATED)
         except:
             return RestResponse(status=status.HTTP_400_BAD_REQUEST)
-        
+
+
 class ExportResponsesAPIView(APIView):
     """
         Exports all responses in date range
     """
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
+
     def get(self, request, from_date, to_date, response_status):
 
         try:
@@ -342,12 +400,14 @@ class ExportResponsesAPIView(APIView):
 
         return RestResponse({"error": "No responses to export"}, status=status.HTTP_404_NOT_FOUND)
 
+
 class DownloadResponse(APIView):
     """
         Exports a single response
     """
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
+
     def get(self, request, res_id):
         try:
             response = Response.objects.get(id=int(res_id))
@@ -358,6 +418,7 @@ class DownloadResponse(APIView):
                 return response
         except Response.DoesNotExist:
             return RestResponse({"error": "Response not found"}, status=status.HTTP_404_NOT_FOUND)
+
 
 class GetUserInfo(APIView):
     authentication_classes = [JWTAuthentication]
@@ -375,11 +436,12 @@ class GetUserInfo(APIView):
             }
             return JsonResponse(user_data, status=status.HTTP_200_OK)
         return RestResponse(status=status.HTTP_404_NOT_FOUND)
-    
+
+
 class GetQuestionnaireAnswerStats(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-    
+
     def get(self, request):
         questionnaire = Questionnaire.objects.all().first()
         if questionnaire:
@@ -387,12 +449,14 @@ class GetQuestionnaireAnswerStats(APIView):
             return RestResponse(stats, status=status.HTTP_200_OK)
         return RestResponse(status=status.HTTP_404_NOT_FOUND)
 
+
 class CheckLoginStatus(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-    
+
     def get(self, request):
         return RestResponse(status=status.HTTP_200_OK)
+
 
 class GetBasicStats(APIView):
     """
@@ -432,8 +496,8 @@ class GetBasicStats(APIView):
             except:
                 average_score = 0
             data = {
-                'current_year':current_year,
-                'current_month':get_month_name(current_month),
+                'current_year': current_year,
+                'current_month': get_month_name(current_month),
                 'total_responses': total_responses,
                 'responses_per_day': response_counts,
                 'average_score': average_score,
@@ -442,7 +506,8 @@ class GetBasicStats(APIView):
 
         except:
             return RestResponse(status=status.HTTP_404_NOT_FOUND)
-        
+
+
 class SetQuestionnaireEmail(APIView):
     def post(self, request, cookie_id, *args, **kwargs):
         try:
@@ -466,6 +531,7 @@ class ResponderDownloadResponse(APIView):
         except Response.DoesNotExist:
             return RestResponse({"error": "Response not found"}, status=status.HTTP_404_NOT_FOUND)
 
+
 class ResponderDownloadPdf(APIView):
     def get(self, request, cookie_id):
         try:
@@ -477,7 +543,8 @@ class ResponderDownloadPdf(APIView):
                 return response
         except Response.DoesNotExist:
             return RestResponse({"error": "Response not found"}, status=status.HTTP_404_NOT_FOUND)
-  
+
+
 class ResponderResponseScore(APIView):
     def get(self, request, response_id):
         try:
