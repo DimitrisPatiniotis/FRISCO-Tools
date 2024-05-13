@@ -66,6 +66,7 @@ const QuestionnaireWrapper = () => {
       <div className='questionaire-inner'>
         {questionnaireState === 'intro' ? ( <QuestionnaireIntro questionnaireId={questionnaire} continueS={continueState} onButtonClick={changeQuestionState} />) : null}
         {questionnaireState === 'question' ? ( <Question continueState={continueState} questionaireId={questionnaire} responseId={response_id} onEnd={(changeQuestionState)} />) : null}
+        {questionnaireState === 'notApplicable' ? ( <QuestionnaireOutro questionnaireId={questionnaire} responseId={oldCookie} questionnaireState={questionnaireState} />) : null}
         {questionnaireState === 'end' ? ( <QuestionnaireOutro questionnaireId={questionnaire} responseId={oldCookie} />) : null}
       </div>
       {user ? (<div className='cursor-pointer z-10 absolute bottom-10 right-12 py-10 px-12' onClick={() => window.location.href = '/admin'}>Enter Admin</div>) : null}

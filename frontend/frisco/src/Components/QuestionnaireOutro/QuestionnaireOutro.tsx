@@ -5,10 +5,11 @@ import NumberCounter from '../../utils/NumberCounter/NumberCounter';
 
 interface QuestionnaireOutroProps {
   questionnaireId: number;
+  questionnaireState?: string;
   responseId: string;
 }
 
-const QuestionnaireOutro: React.FC<QuestionnaireOutroProps> = ({ questionnaireId, responseId }) => {
+const QuestionnaireOutro: React.FC<QuestionnaireOutroProps> = ({ questionnaireId, responseId, questionnaireState }) => {
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [emailSubmitted, setEmailSubmitted] = useState<boolean>(false);
@@ -24,7 +25,9 @@ const QuestionnaireOutro: React.FC<QuestionnaireOutroProps> = ({ questionnaireId
       })
       .then((data) => {
         setTitle(data.outro_title);
-        setDescription(data.outro_text);
+        setDescription(questionnaireState === 'notApplicable'
+            ? 'It seems that your activities/organisation are not affected by the EU TCO Regulation, we sincerely appreciate your time and effort in completing the FRISCO self-assessment questionnaire'
+            : data.outro_text);
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -133,14 +136,17 @@ const QuestionnaireOutro: React.FC<QuestionnaireOutroProps> = ({ questionnaireId
     <div className='text-center question-slide relative'>
       <h2 className='text-4xl font-bold mb-4 text-neutral-800'>{title}</h2>
       <p className='mb-2 text-neutral-600'>{description}</p>
-      <div className='flex justify-center text-3xl flex-col'>
-        <h3 className='text-2xl font-bold mb-3 pt-3 text-neutral-800'>Your Compliance Score Is</h3>
-        <div className='flex w-full items-center justify-center gap-1'>
-          <NumberCounter endValue={complianceScore} duration={500} text_class={'text-frisco_orange'} />
-          <span className='text-frisco_orange'>%</span>
-        </div>
+      { questionnaireState !== 'notApplicable' && (
+          <div className='flex justify-center text-3xl flex-col'>
+            <h3 className='text-2xl font-bold mb-3 pt-3 text-neutral-800'>Your Compliance Score Is</h3>
+            <div className='flex w-full items-center justify-center gap-1'>
+              <NumberCounter endValue={complianceScore} duration={500} text_class={'text-frisco_orange'} />
+              <span className='text-frisco_orange'>%</span>
+            </div>
+          </div>
+      )
+      }
 
-      </div>
       {emailSubmitted ? (
         <h3 className='text-2xl font-bold mb-4 pt-4 text-neutral-800'>Thank you for providing your email!</h3>
       ) : (
@@ -151,7 +157,7 @@ const QuestionnaireOutro: React.FC<QuestionnaireOutroProps> = ({ questionnaireId
           </div>
         </div>
       )}
-      {complianceScore !== 0 && (<>
+      {complianceScore !== 0 && questionnaireState !== 'notApplicable' && (<>
           <h3 className='text-2xl font-bold mb-4 pt-4 text-neutral-800'>Export your response</h3>
           <div className='flex items-center justify-center gap-8'>
             <button

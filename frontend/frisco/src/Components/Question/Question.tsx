@@ -98,7 +98,11 @@ const Question: React.FC<QuestionaireIntroProps> = ({ questionaireId, responseId
             })
             .then((data) => {
                 if (data['end']) {
-                    onEnd('end');
+                    if (questionCategory === 'Applicability') {
+                        onEnd('notApplicable')
+                    } else {
+                        onEnd('end');
+                    }
                 }
                 setLastAnswerId(data.last_answer_id);
                 setQuestionPos(data['question_position']);
