@@ -151,23 +151,24 @@ const QuestionnaireOutro: React.FC<QuestionnaireOutroProps> = ({ questionnaireId
           </div>
         </div>
       )}
-      <h3 className='text-2xl font-bold mb-4 pt-4 text-neutral-800'>Export your response</h3>
-      <div className='flex items-center justify-center gap-8'>
-        <button
-          onClick={downloadResponse}
-          className="px-4 py-2 w-1/3 bg-frisco_purple text-white font-semibold rounded shadow-md transition-colors hover:bg-frisco_purple_light focus:outline-none"
-        >
-          Download CSV
-        </button>
-        {/* <button
-          onClick={downloadPdf}
-          className="px-4 py-2 w-1/3 bg-frisco_purple text-white font-semibold rounded shadow-md transition-colors hover:bg-frisco_purple_light focus:outline-none"
-        >
-          Download PDF
-        </button> */}
-      </div>
-
-
+      {complianceScore !== 0 && (<>
+          <h3 className='text-2xl font-bold mb-4 pt-4 text-neutral-800'>Export your response</h3>
+          <div className='flex items-center justify-center gap-8'>
+            <button
+              onClick={downloadResponse}
+              className="px-4 py-2 w-1/3 bg-frisco_purple text-white font-semibold rounded shadow-md transition-colors hover:bg-frisco_purple_light focus:outline-none"
+            >
+              Download CSV
+            </button>
+            {/* <button
+              onClick={downloadPdf}
+              className="px-4 py-2 w-1/3 bg-frisco_purple text-white font-semibold rounded shadow-md transition-colors hover:bg-frisco_purple_light focus:outline-none"
+            >
+              Download PDF
+            </button> */}
+          </div>
+          </>
+      )}
     </div>
   );
 };
