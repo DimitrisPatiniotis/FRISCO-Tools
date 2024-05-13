@@ -39,17 +39,17 @@ class Questionnaire(models.Model):
         to_date += timedelta(days=1)
         to_date = to_date.strftime("%Y-%m-%d %H:%M:%S%z")
         responses = responses.filter(submission_date__range=[
-                                     from_date, to_date]).order_by('-submission_date')
+            from_date, to_date]).order_by('-submission_date')
         if not responses:
             return None
 
         active_questions = (
             Question.objects.filter(questionnaire=self, active=True)
-            .order_by('position')
-            .values_list('text', flat=True)
+                .order_by('position')
+                .values_list('text', flat=True)
         )
         active_questions = [
-            'Last Edited (UTC)', 'Status'] + list(active_questions)
+                               'Last Edited (UTC)', 'Status'] + list(active_questions)
         response_data = []
         response_data.append(active_questions + ['Total Score'])
 
@@ -74,7 +74,7 @@ class Questionnaire(models.Model):
     def get_responses_stats(self):
         responses = Response.objects.filter(questionnaire=self)
         questions = Question.objects.filter(questionnaire=self, active=True, type__in=[
-                                            'multiple_choice', 'multiple_select']).order_by('position')
+            'multiple_choice', 'multiple_select']).order_by('position')
         question_categories = QuestionCategory.objects.filter(active=True)
 
         response_stats = []
@@ -293,29 +293,30 @@ class Response(models.Model):
     def get_csv(self):
         question_answers = (
             Answer.objects.filter(response=self, skipped=False)
-            .select_related('question')
-            .order_by('question__position')
+                .select_related('question')
+                .order_by('question__position')
         )
-        response_data=[]
+        response_data = []
         for answer in question_answers:
             if answer.question.type == 'multiple_choice':
-                response_data.append([answer.question.text, answer.get_value, answer.option.weight])
+                response_data.append(
+                    [answer.question.question_category, answer.question.text, answer.get_value, answer.option.weight])
             elif answer.question.type == 'multiple_select':
-                response_data.append([answer.question.text, answer.get_value, sum([o.weight for o in answer.options.all()])])
+                response_data.append([answer.question.question_category, answer.question.text, answer.get_value,
+                                      sum([o.weight for o in answer.options.all()])])
             else:
                 # TO BE ADDED: handle other question types
                 pass
 
-
-        columns = ["Question", "Answer", "Score"]
+        columns = ["Category", "Question", "Answer", "Score"]
         df = pd.DataFrame(response_data, columns=columns)
-        last_row = pd.DataFrame([["", "Total Score", self.get_score]], columns=columns)
+        last_row = pd.DataFrame([["", "", "Total Score", self.get_score]], columns=columns)
         df = pd.concat([df, last_row], ignore_index=True)
 
         export_filename = f'{self.id}_response_data.csv'
         df.to_csv(export_filename, index=False)
         return export_filename
-    
+
     def get_pdf(self):
         from io import BytesIO
 
@@ -328,7 +329,7 @@ class Response(models.Model):
         y_position = 750
         available_space = 700
         max_width = 405
-        
+
         # Add content to the PDF using Paragraph for better text wrapping
         styles = getSampleStyleSheet()
         normal_style = styles['Normal']
@@ -342,13 +343,12 @@ class Response(models.Model):
         # Add questions and answers to the PDF in order
         question_answers = (
             Answer.objects.filter(response=self, skipped=False)
-            .select_related('question')
-            .order_by('question__position')
+                .select_related('question')
+                .order_by('question__position')
         )
         last_question_height, last_answer_height = 0, 0
 
         for answer in question_answers:
-
 
             # Truncate the text to fit within the maximum width
             question_text = answer.question.text
@@ -374,8 +374,8 @@ class Response(models.Model):
 
             question_paragraph.drawOn(pdf, 100, y_position)
             answer_paragraph.drawOn(pdf, 100, y_position - 10 - answer_paragraph.height)
-            
-            y_position -=  (question_paragraph.height + answer_paragraph.height) * 2
+
+            y_position -= (question_paragraph.height + answer_paragraph.height) * 2
 
         # Add more content based on your requirements
 
@@ -391,7 +391,6 @@ class Response(models.Model):
             pdf_file.write(buffer.read())
 
         return export_filename
-
 
 
 class Answer(models.Model):
@@ -425,9 +424,10 @@ class Answer(models.Model):
     def __str__(self):
         return str(self.response) + str(self.question) + ' ' + str(self.question.type)
 
-    def save_with_update(self, options=None, *args, **kwargs,):
+    def save_with_update(self, options=None, *args, **kwargs, ):
         existing_answer = Answer.objects.filter(
-            question=self.question, response=self.response, response__questionnaire=self.response.questionnaire,).first()
+            question=self.question, response=self.response,
+            response__questionnaire=self.response.questionnaire, ).first()
 
         with transaction.atomic():
             if existing_answer:
