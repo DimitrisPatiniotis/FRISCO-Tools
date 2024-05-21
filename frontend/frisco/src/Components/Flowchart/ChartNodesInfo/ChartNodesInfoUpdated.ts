@@ -241,7 +241,7 @@ export const nodeInfo_1: NodeInfo = {
     29: {
         id: '29',
         type: 'rectangleNode',
-        data: { handleLeft: true, handleRight: true, label: 'You must clearly state in your Terms and Conditions your policy for counterring terrorist content - including explanations about the specific measures and use of automated tools', id: '29', background_color: 'rgb(252,227,135)', text_color: 'black', node_height: '104px', node_width: '410px', border_radius: '20px', node_margins: '0', font_size: '12px' },
+        data: { handleLeft: true, handleRight: true, label: 'You must clearly state in your Terms and Conditions your policy for countering terrorist content - including explanations about the specific measures and use of automated tools', id: '29', background_color: 'rgb(252,227,135)', text_color: 'black', node_height: '104px', node_width: '410px', border_radius: '20px', node_margins: '0', font_size: '12px' },
         position: { x: 6030, y: highFlowLineY + 800 },
 
     },
@@ -427,7 +427,7 @@ export const nodeInfo_1: NodeInfo = {
     58: {
         id: '58',
         type: 'rectangleNode',
-        data: { incomingHandleLeft: true, outgoingHandleRight: true, label: "If fundamental rights and freedoms infrigement are detected/adjudicated, you will have to reinstate the content", id: '58', background_color: 'rgb(223,183,230)', node_height: '75px', node_width: '340px', border_radius: '10px', node_margins: '0', node_padding: '10px' },
+        data: { incomingHandleLeft: true, outgoingHandleRight: true, label: "If fundamental rights and freedoms infringement are detected/adjudicated, you will have to reinstate the content", id: '58', background_color: 'rgb(223,183,230)', node_height: '75px', node_width: '340px', border_radius: '10px', node_margins: '0', node_padding: '10px' },
         position: { x: 3150, y: highFlowLineY + 180 },
     },
     59: {
@@ -481,7 +481,7 @@ export const nodeInfo_1: NodeInfo = {
     67: {
         id: '67',
         type: 'rectangleNode',
-        data: { incomingHandleBottom: true, outgoingHandleTop: true, label: "Other impossbilities not attributable to you, including technical and operational reasons", id: '67', background_color: 'rgb(223,183,230)', node_height: '105px', node_width: '220px', border_radius: '10px', node_margins: '0', node_padding: '10px' },
+        data: { incomingHandleBottom: true, outgoingHandleTop: true, label: "Other impossibilities not attributable to you, including technical and operational reasons", id: '67', background_color: 'rgb(223,183,230)', node_height: '105px', node_width: '220px', border_radius: '10px', node_margins: '0', node_padding: '10px' },
         position: { x: 5800, y: highFlowLineY - 420 },
     },
     68: {
@@ -526,7 +526,7 @@ export const nodeInfo_1: NodeInfo = {
     73: {
         id: '73',
         type: 'rectangleNode',
-        data: { incomingHandleLeft: true, outgoingHandleRight:true, label: "Yous should have!", id: '73', background_color: 'rgb(223,183,230)', node_height: '50px', node_width: '200px', border_radius: '10px', node_margins: '0', node_padding: '10px' },
+        data: { incomingHandleLeft: true, outgoingHandleRight:true, label: "Inform the user on the reasons the content was removed/disabled access and its right to challenge the order!", id: '73', background_color: 'rgb(223,183,230)', node_height: '50px', node_width: '200px', border_radius: '10px', node_margins: '0', node_padding: '10px' },
         position: { x: 6775, y: highFlowLineY - 140 },
     },
     74: {
@@ -538,7 +538,7 @@ export const nodeInfo_1: NodeInfo = {
     75: {
         id: '75',
         type: 'rectangleNode',
-        data: { incomingHandleLeft: true, outgoingHandleRight:true, label: "Yous should have!", id: '75',background_color: 'rgb(243,178,208)', node_height: '50px', node_width: '200px', border_radius: '10px', node_margins: '0', node_padding: '10px' },
+        data: { incomingHandleLeft: true, outgoingHandleRight:true, label: "Establish user-friendly complaint mechanisms!", id: '75',background_color: 'rgb(243,178,208)', node_height: '50px', node_width: '200px', border_radius: '10px', node_margins: '0', node_padding: '10px' },
         position: { x: 7750, y: highFlowLineY - 140 },
     },
     76: {
@@ -550,7 +550,7 @@ export const nodeInfo_1: NodeInfo = {
     77: {
         id: '77',
         type: 'rectangleNode',
-        data: { incomingHandleLeft: true, outgoingHandleRight:true, label: "You should have!", id: '77', background_color: 'rgb(243,178,208)', node_height: '50px', node_width: '200px', border_radius: '10px', node_margins: '0', node_padding: '10px' },
+        data: { incomingHandleLeft: true, outgoingHandleRight:true, label: "Inform the user about its rights to appeal", id: '77', background_color: 'rgb(243,178,208)', node_height: '50px', node_width: '200px', border_radius: '10px', node_margins: '0', node_padding: '10px' },
         position: { x: 8750, y: highFlowLineY - 140 },
     },
     91: {
@@ -580,7 +580,7 @@ export const nodeInfo_1: NodeInfo = {
     81: {
         id: '81',
         type: 'diamondNode',
-        data: { incomingHandleTop: true, outgoingHandleLeft:true, outgoingHandleBottom:true, label: "Were fundamental rights and freedoms infrigements detected or adjudicated?", id: '81', background_color: 'rgb(243,178,208)', text_color: 'black', text_translate: 'translateY(85px)', node_height: '220px', node_width: '220px', font_size: '14px', node_margins: '-2px 41px' },
+        data: { incomingHandleTop: true, outgoingHandleLeft:true, outgoingHandleBottom:true, label: "Were fundamental rights and freedoms infringements detected or adjudicated?", id: '81', background_color: 'rgb(243,178,208)', text_color: 'black', text_translate: 'translateY(85px)', node_height: '220px', node_width: '220px', font_size: '14px', node_margins: '-2px 41px' },
         position: { x: 9200, y: highFlowLineY + 1281},
     },
     82: {
@@ -598,7 +598,7 @@ export const nodeInfo_1: NodeInfo = {
     84: {
         id: '84',
         type: 'rectangleNode',
-        data: { incomingHandleRight: true, outgoingHandleBottom:true, label: "You should have!", id: '84', background_color: 'rgb(243,178,208)', node_height: '75px', node_width: '340px', border_radius: '10px', node_margins: '0', node_padding: '10px' },
+        data: { incomingHandleRight: true, outgoingHandleBottom:true, label: "Inform the user that about the rejection of the appeal and provide explanations", id: '84', background_color: 'rgb(243,178,208)', node_height: '75px', node_width: '340px', border_radius: '10px', node_margins: '0', node_padding: '10px' },
         position: { x: 8460, y: highFlowLineY + 1870 },
     },
     85: {
