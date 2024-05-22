@@ -362,13 +362,13 @@ export const nodeInfo_1: NodeInfo = {
     48: {
         id: '48',
         type: 'diamondNode',
-        data: { incomingHandleLeft: true, outgoingHandleRight: true, outgoingHandleBottom: true, label: 'Does your residency Competent Authority decided you are "exposed to terrorist content" and has notified you of this ?', id: '48', background_color: 'rgb(223,183,230)', text_translate: 'translateY(60px)', node_height: '200px', node_width: '200px', font_size: '15px', node_margins: '-2px 32px' },
+        data: { incomingHandleLeft: true, outgoingHandleRight: true, outgoingHandleTop:true, outgoingHandleBottom: true, label: 'Does your residency Competent Authority decided you are "exposed to terrorist content" and has notified you of this ?', id: '48', background_color: 'rgb(223,183,230)', text_translate: 'translateY(60px)', node_height: '200px', node_width: '200px', font_size: '15px', node_margins: '-2px 32px' },
         position: { x: 1825, y: highFlowLineY + 305 },
     },
     49: {
         id: '49',
         type: 'diamondNode',
-        data: { incomingHandleLeft: true, outgoingHandleBottom: true, outgoingHandleTop: true, label: "Was it issued by the Residency Competent Authority ?", id: '49', background_color: 'rgb(223,183,230)', text_translate: 'translateY(56px)', node_height: '160px', node_width: '160px', font_size: '15px', node_margins: '-2px 32px' },
+        data: { incomingHandleLeft: true,incomingHandleBottom: true, outgoingHandleTop: true, outgoingHandleRight:true, label: "Was it issued by the Residency Competent Authority ?", id: '49', background_color: 'rgb(223,183,230)', text_translate: 'translateY(56px)', node_height: '160px', node_width: '160px', font_size: '15px', node_margins: '-2px 32px' },
         position: { x: 1500, y: highFlowLineY - 150 },
     },
 
@@ -402,7 +402,7 @@ export const nodeInfo_1: NodeInfo = {
     54: {
         id: '54',
         type: 'diamondNode',
-        data: { incomingHandleLeft: true, incomingHandleBottom: true, outgoingHandleRight: true, label: "Have you received the removal order through your single Contact Point ?", id: '54', background_color: 'rgb(223,183,230)', text_translate: 'translateY(60px)', node_height: '180px', node_width: '180px', font_size: '15px', node_margins: '-2px 32px' },
+        data: { incomingHandleLeft: true, incomingHandleBottom: true, outgoingHandleRight: true, label: "Have you received the removal order through your single Contact Point?", id: '54', background_color: 'rgb(223,183,230)', text_translate: 'translateY(60px)', node_height: '180px', node_width: '180px', font_size: '15px', node_margins: '-2px 32px' },
         position: { x: 3600, y: highFlowLineY - 417 },
     },
 
@@ -410,7 +410,7 @@ export const nodeInfo_1: NodeInfo = {
         id: '55',
         type: 'rectangleNode',
         data: { incomingHandleLeft: true, outgoingHandleRight: true, label: "You have received a cross-border Removal Order", id: '55', background_color: 'rgb(223,183,230)', node_height: '75px', node_width: '340px', border_radius: '10px', node_margins: '0', node_padding: '10px' },
-        position: { x: 1800, y: highFlowLineY + 180 },
+        position: { x: 1820, y: highFlowLineY + 50 },
     },
     56: {
         id: '56',
@@ -700,9 +700,11 @@ export const initialEdges_1: Edge[] = [
     { id: "47-48", source: "47", target: "48", label: "No", sourceHandle: 'source-2', },
     { id: "47-11", source: "47", target: "11", label: "Yes", sourceHandle: 'source-3', },
     { id: "47-11", source: "48", target: "11", label: "Yes", sourceHandle: 'source-3', },
-    { id: "e46-49", source: "46", target: "49", label: "Yes" },
-    { id: "e49-55", source: "49", target: "55", label: "No", sourceHandle: 'source-3', },
+    { id: "e46-49", source: "46", target: "49", label: "Yes", targetHandle: 'target-4'},
+    { id: "e49-55", source: "49", target: "55", label: "No", sourceHandle: 'source-2', },
     { id: "e55-56", source: "55", target: "56" },
+
+    { id: "e48-49", source: "48", target: "49", label: "No", sourceHandle: 'source-1', },
 
     { id: "e54-59", source: "54", target: "59", label: "No / I don't know" },
     { id: "e54-60", source: "54", target: "60", label: "Yes" },
@@ -726,6 +728,7 @@ export const initialEdges_1: Edge[] = [
     { id: "e38-39", source: "38", target: "39", label: "Got It!" },
     { id: "e39-89", source: "39", target: "89", },
 
+
     { id: "e56-57", source: "56", target: "57" },
     { id: "e57-58", source: "57", target: "58" },
     { id: "e58-54", source: "58", target: "54", targetHandle: 'target-3' },
@@ -735,6 +738,10 @@ export const initialEdges_1: Edge[] = [
     { id: "e51-53", source: "51", target: "53", label: "No" },
     { id: "e52-54", source: "52", target: "54", targetHandle: 'target-4', },
     { id: "e53-54", source: "53", target: "54" },
+
+    { id: "e52-60", source: "52", target: "60" },
+    { id: "e53-60", source: "53", target: "60" },
+    { id: "e58-60", source: "58", target: "60" },
 
     { id: "e60-61", source: "60", target: "61" },
     { id: "e62-63", source: "62", target: "63", label: "Yes", targetHandle: 'target-4' },
@@ -938,15 +945,15 @@ export const stateToQuestions: StateToQuestions = {
     },
     49: {
         question: 'Was it issued by the Residency Competent Authority?',
-        answers: [{ answer_text: 'Yes', answer_add: [50, 51] }, { answer_text: 'No', answer_add: [55, 56, 57, 58, 54] }]
+        answers: [{ answer_text: 'Yes', answer_add: [50, 51] }, { answer_text: 'No', answer_add: [55, 56, 57, 58, 60, 61, 62] }]
     },
     51: {
         question: 'Were you provided with applicable procedures and deadlines 12 hours before the Removal Order was issued?',
-        answers: [{ answer_text: 'Yes', answer_add: [52, 54] }, { answer_text: 'No', answer_add: [53, 54] }]
+        answers: [{ answer_text: 'Yes', answer_add: [52, 60, 61, 62] }, { answer_text: 'No', answer_add: [53, 60, 61, 62] }]
     },
     54: {
-        question: 'Were you provided with applicable procedures and deadlines 12 hours before the Removal Order was issued ?',
-        answers: [{ answer_text: 'No', answer_add: [59, 61, 62] }, { answer_text: 'I don\'t know', answer_add: [59, 61, 62] }, { answer_text: 'Yes', answer_add: [60, 61, 62] }]
+        question: 'Have you received the removal order through your single Contact Point?',
+        answers: [{ answer_text: 'No', answer_add: [60, 61, 62] }, { answer_text: 'I don\'t know', answer_add: [60, 61, 62] }, { answer_text: 'Yes', answer_add: [60, 61, 62] }]
     },
     62: {
         question: 'Does the removal order contain manifest errors or lack sufficient information?',
