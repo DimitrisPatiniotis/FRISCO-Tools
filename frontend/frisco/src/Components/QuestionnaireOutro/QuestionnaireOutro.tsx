@@ -84,10 +84,7 @@ const QuestionnaireOutro: React.FC<QuestionnaireOutroProps> = ({ questionnaireId
     try {
       const response = await fetch(`${ACTIVE_URL}/api/user_download_response/${responseId}/`, requestOptions);
       if (response.ok) {
-        const contentDisposition = response.headers.get('content-disposition');
-        const filename = contentDisposition
-          ? contentDisposition.split('filename=')[1]
-          : 'FRISCO_Response_Overview.csv';
+        const filename = 'FRISCO_Questionnaire_Response_Overview.csv';
 
         const blob = await response.blob();
         const a = document.createElement('a');
